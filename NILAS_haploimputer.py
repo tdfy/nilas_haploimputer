@@ -7,11 +7,12 @@
 # 
 # NILAS_haplotimputer was written in Python 3.6; data frames constructed using Pandas v0.19.2 (McKinney 2010). NILAS_haplotimputer selects the donor
 # and recurrent parent genotype matrices from consensus matrix and then parses the corresponding NILAS lines from the genotype extracted VCF; concatenating
-# the founder and NILAS progeny into one genotype matrix in order to:  i) filter heterozygous and non-polymorphic markers from donor/recurrent parents
+# the founder and NILAS progeny into one genotype matrix in order to:  i) filter heterozygous and non-polymorphic markers from donor/recurrent parents
 # ii) encode NILAS line genotypes according to parent-of-origin based on the remaining homozygous polymorphic markers iii) aggregate consecutive encoded
 # genotypes into haplotype blocks iv) impute missing marker and haplotype blocks based on adjacent contig congruence v) call second alternate alleles vi)
 # exports genomic coordinates and encoded/imputed genotype matrices for visualization in FlapJack v1.8.0 (Milne et al. 2010) and vii) convert haplotype block
 # marker data into physical coordinates for characterization.
+
 
 #Modules:--------------------------------------------------------------------------------------------------------------
 
@@ -19,6 +20,8 @@ import re, sys
 import numpy as np
 import pandas as pd
 import os
+import pybedtools
+
 
 #User Variables:--------------------------------------------------------------------------------------------------------------
 
@@ -28,9 +31,7 @@ NILAS_Crossing_Scheme = sys.argv[3]
 
 #Global Declarations:--------------------------------------------------------------------------------------------------------------
 
-isc = pd.read_csv('*'+sys.argv[1]+'x'+sys.argv[2]+'_isc.bed', sep="\t", dtype =object,names = ["CHR", "Start", "Stop", "Coverage","Contig_Start","Contig_Stop","isc"])
-
-NILASdir = os.makedirs('*' + sys.argv[1] + "x" + sys.argv[2] + '//' )  #<--------- Generates Group Directory 
+# NILASdir = os.makedirs('*' + sys.argv[1] + "x" + sys.argv[2] + '//' )  #<--------- Generates Group Directory 
 path = '*' + sys.argv[1] + "x" + sys.argv[2] + '//'
 
 CHROMend = {'1':307041717,'2':244442276,'3':235667834,'4':246994605,'5':223902240,'6':174033170,
@@ -50,10 +51,10 @@ ZmPR_list = ['Sample','Scheme', 'ZmPR', 'CHROM', 'Hap_Geno', 'Haplotype_Block', 
              'FG_5_BP_Density', 'FG_3_BP_Density', 'BG_5_BP_Density', 'BG_3_BP_Density', 'Background_Perc']
 
 NILAS_Dict = {}
-
+Coordinates = ['CHROM', 'POS']
 #--------------------------------------------------------------------------------------------------------------------
 
-#Task 1: Import GT Files (manual CoO filter)---------------------------------------------------------------------------------------------
+# Import GT Files (manual CoO filter)---------------------------------------------------------------------------------------------
 print ("Importing GT file----- YOU HAVE A MANUAL COORDINATE FILTER ON...")
 gtdata = pd.read_csv("NILAS.GT.FORMAT", sep="\t", dtype =object)
 
@@ -64,13 +65,13 @@ gtdata = gtdata[~gtdata.POS.isin(NonConlist)]
 Consensus = pd.read_csv("NewCon.txt", sep="\t", dtype =object)      #<--------- DP RP consensus genotypes w/ MultiMode Sites Filtered 
 Consensus = Consensus[~Consensus.POS.isin(NonConlist)]         
 
-#Task 2: Select Founder Lines________________________________________________________________________________________________________________
+# Select Founder Lines________________________________________________________________________________________________________________
 print("Selecting Founder Lines from Consensus File.... ")
 
 Parents = ['CHROM','POS',sys.argv[1],sys.argv[2]]
 Consensus = Consensus.filter((Parents))
 
-#Task 2: Select NILAS Lines________________________________________________________________________________________________________________
+# Select NILAS Lines________________________________________________________________________________________________________________
 print("Selecting NILAS Lines from GT File.... ")
 
 Select = gtdata[gtdata.columns[gtdata.columns.to_series().str.contains(sys.argv[3])]]   #<--------- Selects NILAS lines of breeding group
@@ -79,20 +80,20 @@ NILASlist = (NILAS.columns[NILAS.columns.to_series().str.contains(sys.argv[3])])
 SampleNo = len(NILASlist)
 print(SampleNo)
 
-# Task 3: Concatenate Consensus and NILAS DFs________________________________________________________________________________________________________________
+# Concatenate Consensus and NILAS DFs________________________________________________________________________________________________________________
 print("Concatenate Consensus and NILAS DFs.....")
 
 gtdataNILAS = pd.concat([Consensus, NILAS], axis=1)
 
-#Task 3: Filter DP/RP Sites-------------------------------------------
+# Filter DP/RP Sites-------------------------------------------
 print('Filtering DP/RP Sites: NonVariant/Missing Data....')
 
-#Compile Het Sites Coordinate and Export:
+# Compile Het Sites Coordinate and Export:
 NILAShet = gtdataNILAS[(gtdataNILAS.iloc[:,2] == '0/1') | (gtdataNILAS.iloc[:,3] == '0/1')]
 NILAShet = NILAShet.iloc[:,0:4]
 NILAShet.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_DP_RP_HET.txt'), sep='\t')  #-------------> Parental Heterozygous sites{Export}
 
-#Filter Missing and Het Sites from Consensus Parents: 
+# Filter Missing and Het Sites from Consensus Parents: 
 gtdataNILAS = gtdataNILAS[(gtdataNILAS.iloc[:,2] != gtdataNILAS.iloc[:,3]) &
     (gtdataNILAS.iloc[:,2] != './.') & (gtdataNILAS.iloc[:,3] != './.') &
     (gtdataNILAS.iloc[:,2] != '0/1') & (gtdataNILAS.iloc[:,3] != '0/1')]
@@ -100,7 +101,7 @@ gtdataNILAS = gtdataNILAS[(gtdataNILAS.iloc[:,2] != gtdataNILAS.iloc[:,3]) &
 #gtdataNILAS.to_csv(sys.argv[1]+'x'+sys.argv[2]+'_GENO9.txt', sep='\t')       #-------------> ORG Genotype Outfile{Export}
 # Slice = gtdataNILAS.drop(gtdataNILAS.columns[6:], axis=1)
 
-#Task 4: Conditional Block:________________________________________________________________________________________________________________
+# Conditional Block:________________________________________________________________________________________________________________
 print("Encoding NILAS.....")
 # 
 for sample in NILASlist:
@@ -145,7 +146,25 @@ ZmPR4_POS = ZmPR4_QTL['POS'].tolist()
 
 ZmPR_POS_list = ZmPR1_POS + ZmPR2_POS + ZmPR3_POS + ZmPR4_POS
 
-#Task 7: Imputation & Annotation:________________________________________________________________________________________________________________
+# Intersect Group BED file with ISC BED:________________________________________________________________________________________________________________
+
+CoBed = gtdataNILAS.filter((Coordinates)).reset_index(drop=True)
+CoBed = CoBed[~CoBed['CHROM'].str.contains('B73V4_ctg')]
+
+CoBed['stop'] = CoBed.iloc[:,1].astype(int) + 1
+
+CoBed.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'.bed'), sep='\t', header= False, index= False)
+
+GroupBed = pybedtools.BedTool(path + '//'+sys.argv[1]+'x'+sys.argv[2]+r'.bed')
+B73isc = pybedtools.BedTool('isdigB73v4_pid96_convert.bed')
+
+U_isc = pybedtools.BedTool.intersect(GroupBed,B73isc, wb=True)
+
+U_isc2 = U_isc.saveas(path +'//' +sys.argv[1]+'x'+sys.argv[2]+'.bed')
+
+isc = pd.read_csv(path+sys.argv[1]+'x'+sys.argv[2]+'.bed', sep="\t", dtype =object,names = ["CHR", "Start", "Stop", "Coverage","Contig_Start","Contig_Stop","isc"])
+
+# Imputation & Annotation:________________________________________________________________________________________________________________
 print("Imputing NILAS Haplotypes.....")
 
 gtdataNILAS = gtdataNILAS[~gtdataNILAS['CHROM'].str.contains('B73V4_ctg')]
@@ -192,7 +211,7 @@ for sample in NILASlist:
     
     gtdataNILAS[(sample)+'_Imputed'] = gtdataNILAS[(sample)]
     
-    #__________________________Impute by Flanking Marker Homology__________________________ 
+    #__________________________Impute Missing Data by Flanking Marker Homology__________________________ 
     
     gtdataNILAS[(sample)+'_Imputed'] = np.where((gtdataNILAS[(sample)+'_Imputed'] == '0') &
      (gtdataNILAS[(sample)+'_Five_Flank_Encode'] == gtdataNILAS[(sample)+'_Three_Flank_Encode']),
@@ -203,7 +222,7 @@ for sample in NILASlist:
     
     gtdataNILAS[(sample)+'_Hap_Marker_No'] = gtdataNILAS.groupby(['CHROM', (sample)+'_Haplotype_Block'])['CHROM'].transform('size')    
  
-#__________________________ Impute by Contig Congruence Size__________________________ 
+#__________________________ Impute by Contig Congruence __________________________ 
 
 isc = isc.reset_index(drop=True)
 gtdataNILAS = gtdataNILAS.reset_index(drop=True)
@@ -248,7 +267,6 @@ for sample in NILASlist:
 ###_________________________________________________________________________________________________________________________________________________________
 #Task 8: Calculating 2nd Alt Genotype Frequency...
 print("Calculating 2nd Alt Genotype Frequency...")
-Coordinates = ['CHROM', 'POS']
 
 ###ZmPR1_________________________________________________________________________________________________
 ZmPR1 = gtdataNILAS[(gtdataNILAS['CHROM'] ==  '1') &  (gtdataNILAS['POS'].astype(int).between(57191440, 185363076, inclusive=True))]
@@ -451,7 +469,7 @@ NILASencode.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_Encoded_Geno
 
 HapMap = NILAShap.filter((Coordinates))
 HapMap.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_Coordinates.txt'), sep='\t', header= False, index= True) #------------->MAP Outfile {Export}
-
+ 
 NILAS_Imputed = NILAShap.iloc[:,0:SampleNo + 2]
 
 NILAS_Imputed = NILAS_Imputed[NILAS_Imputed.columns[NILAS_Imputed.columns.to_series().str.contains('NILAS')]]
