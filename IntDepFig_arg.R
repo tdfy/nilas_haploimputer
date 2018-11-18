@@ -16,7 +16,7 @@ Comp2 <- (paste(Comp,"C.bed",sep=""))
 
 fig_title <- substr(Int,1,nchar(Int)-4)
 marker <- (paste(substr(fig_title,1,nchar(fig_title)-6),"_convert.bed",sep=""))
-marker_file <- (paste("/Users/Todd/Dropbox/GBSThesis/NILAS_Final/BED/convert/chr_bed/",marker,sep=""))
+marker_file <- (paste("/*",marker,sep=""))
 group <- lapply(strsplit(fig_title, "_"), `[`, 1)
 QTL <- lapply(strsplit(fig_title, "_"), `[`, 2)
 rec <- lapply(strsplit(fig_title, "x"), `[`, 1)
