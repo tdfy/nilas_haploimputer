@@ -808,7 +808,7 @@ ZmPR2_BG_Geno['Hap_Geno'] = ZmPR2_BG_Geno['Hap_Geno'].map({'DP':'DP_BG','RP':'RP
 
 
 ZmPR2_Geno_Sum = pd.concat([ZmPR2_FG_Geno,ZmPR2_BG_Geno], axis=0)
-ZmPR2_Geno_Sum = ZmPR2_Geno_Sum[~ZmPR2_Geno_Sum['Sample'].str.contains('C')]
+# ZmPR2_Geno_Sum = ZmPR2_Geno_Sum[~ZmPR2_Geno_Sum['Sample'].str.contains('C')]
 ZmPR2_Geno_Sum = ZmPR2_Geno_Sum.fillna(0)
 ZmPR2_Geno_Sum['Perc_Geno'] = ZmPR2_Geno_Sum['Foreground_Perc'] + ZmPR2_Geno_Sum['Background_Perc']
 
@@ -895,7 +895,7 @@ ZmPR3_BG_Geno['Hap_Geno'] = ZmPR3_BG_Geno['Hap_Geno'].map({'DP':'DP_BG','RP':'RP
 
 
 ZmPR3_Geno_Sum = pd.concat([ZmPR3_FG_Geno,ZmPR3_BG_Geno], axis=0)
-ZmPR3_Geno_Sum = ZmPR3_Geno_Sum[~ZmPR3_Geno_Sum['Sample'].str.contains('C')]
+# ZmPR3_Geno_Sum = ZmPR3_Geno_Sum[~ZmPR3_Geno_Sum['Sample'].str.contains('C')]
 ZmPR3_Geno_Sum = ZmPR3_Geno_Sum.fillna(0)
 ZmPR3_Geno_Sum['Perc_Geno'] = ZmPR3_Geno_Sum['Foreground_Perc'] + ZmPR3_Geno_Sum['Background_Perc']
 
@@ -982,7 +982,7 @@ ZmPR4_BG_Geno['Hap_Geno'] = ZmPR4_BG_Geno['Hap_Geno'].map({'DP':'DP_BG','RP':'RP
 
 
 ZmPR4_Geno_Sum = pd.concat([ZmPR4_FG_Geno,ZmPR4_BG_Geno], axis=0)
-ZmPR4_Geno_Sum = ZmPR4_Geno_Sum[~ZmPR4_Geno_Sum['Sample'].str.contains('C')]
+# ZmPR4_Geno_Sum = ZmPR4_Geno_Sum[~ZmPR4_Geno_Sum['Sample'].str.contains('C')]
 ZmPR4_Geno_Sum = ZmPR4_Geno_Sum.fillna(0)
 ZmPR4_Geno_Sum['Perc_Geno'] = ZmPR4_Geno_Sum['Foreground_Perc'] + ZmPR4_Geno_Sum['Background_Perc']
 
