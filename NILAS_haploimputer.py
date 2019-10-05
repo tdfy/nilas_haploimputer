@@ -270,6 +270,8 @@ print("Calculating 2nd Alt Genotype Frequency...")
 ZmPR1 = gtdataNILAS[(gtdataNILAS['CHROM'] ==  '1') &  (gtdataNILAS['POS'].astype(int).between(57191440, 185363076, inclusive=True))]
 ZmPR1CoO = ZmPR1.filter((Coordinates))
 Compliment = (ZmPR1.columns[~ZmPR1.columns.to_series().str.contains('C')])
+ZmPR1_C = (ZmPR1.columns[ZmPR1.columns.to_series().str.contains('C')])
+ZmPR1_COMP = ZmPR1.filter(ZmPR1_C)
 ZmPR1 = ZmPR1.filter(Compliment)
 ZmPR1 = ZmPR1[ZmPR1.columns[ZmPR1.columns.to_series().str.contains('1g')]]
 ZmPR1 = ZmPR1[ZmPR1.columns[ZmPR1.columns.to_series().str.contains('Imputed')]]
@@ -277,7 +279,13 @@ ZmPR1 = pd.concat([ZmPR1CoO, ZmPR1], axis=1)
 
 Zm1sample_list = (ZmPR1.columns[ZmPR1.columns.to_series().str.contains('1g')])
 
-print(Zm1sample_list)
+ZmPR1_COMP = ZmPR1_COMP[ZmPR1_COMP.columns[ZmPR1_COMP.columns.to_series().str.contains('1g')]]
+ZmPR1_COMP = ZmPR1_COMP[ZmPR1_COMP.columns[ZmPR1_COMP.columns.to_series().str.contains('Imputed')]]
+ZmPR1_COMP = pd.concat([ZmPR1CoO, ZmPR1_COMP], axis=1)
+
+Zm1sample_complist = (ZmPR1_COMP.columns[ZmPR1_COMP.columns.to_series().str.contains('1g')])
+
+
 
 Zm1Num = len(Zm1sample_list)
 ZmPR1['Count_RP'] = (ZmPR1.iloc[:,2:(Zm1Num +2)].astype(str) == 'G').sum(axis=1) #Recurrent
@@ -290,12 +298,21 @@ ZmPR1['DP2_Loci_1'] = ((ZmPR1[['Count_RP','Count_Amb','Count_Het']]).sum(axis=1)
 ZmPR2 = gtdataNILAS[(gtdataNILAS['CHROM'] ==  '8') &  (gtdataNILAS['POS'].astype(int).between(97682806, 167995313, inclusive=True))]
 ZmPR2CoO = ZmPR2.filter((Coordinates))
 Compliment = (ZmPR2.columns[~ZmPR2.columns.to_series().str.contains('C')])
+ZmPR2_C = (ZmPR2.columns[ZmPR2.columns.to_series().str.contains('C')])
+ZmPR2_Comp = ZmPR2.filter(ZmPR2_C)
 ZmPR2 = ZmPR2.filter(Compliment)
 ZmPR2 = ZmPR2[ZmPR2.columns[ZmPR2.columns.to_series().str.contains('2g')]]
 ZmPR2 = ZmPR2[ZmPR2.columns[ZmPR2.columns.to_series().str.contains('Imputed')]]
 ZmPR2 = pd.concat([ZmPR2CoO, ZmPR2], axis=1)
 
 Zm2sample_list = (ZmPR2.columns[ZmPR2.columns.to_series().str.contains('2g')])
+
+ZmPR2_Comp = ZmPR2_Comp[ZmPR2_Comp.columns[ZmPR2_Comp.columns.to_series().str.contains('2g')]]
+ZmPR2_Comp = ZmPR2_Comp[ZmPR2_Comp.columns[ZmPR2_Comp.columns.to_series().str.contains('Imputed')]]
+ZmPR2_Comp = pd.concat([ZmPR2CoO, ZmPR2_Comp], axis=1)
+
+Zm2sample_complist = (ZmPR2_Comp.columns[ZmPR2_Comp.columns.to_series().str.contains('2g')])
+print(Zm2sample_complist)
 
 Zm2Num = len(Zm2sample_list)
 ZmPR2['Count_RP'] = (ZmPR2.iloc[:,2:(Zm2Num +2)].astype(str) == 'G').sum(axis=1) #Recurrent
@@ -308,12 +325,23 @@ ZmPR2['DP2_Loci_2'] = ((ZmPR2[['Count_RP','Count_Amb','Count_Het']]).sum(axis=1)
 ZmPR3 = gtdataNILAS[(gtdataNILAS['CHROM'] ==  '9') &  (gtdataNILAS['POS'].astype(int).between(7384635, 119857067, inclusive=True))]
 ZmPR3CoO = ZmPR3.filter((Coordinates))
 Compliment = (ZmPR3.columns[~ZmPR3.columns.to_series().str.contains('C')])
+ZmPR3_C = (ZmPR3.columns[ZmPR3.columns.to_series().str.contains('C')])
+ZmPR3_Comp = ZmPR3.filter(ZmPR3_C)
 ZmPR3 = ZmPR3.filter(Compliment)
 ZmPR3 = ZmPR3[ZmPR3.columns[ZmPR3.columns.to_series().str.contains('3g')]]
 ZmPR3 = ZmPR3[ZmPR3.columns[ZmPR3.columns.to_series().str.contains('Imputed')]]
 ZmPR3 = pd.concat([ZmPR3CoO, ZmPR3], axis=1)
 
 Zm3sample_list = (ZmPR3.columns[ZmPR3.columns.to_series().str.contains('3g')])
+
+
+ZmPR3_Comp = ZmPR3_Comp[ZmPR3_Comp.columns[ZmPR3_Comp.columns.to_series().str.contains('3g')]]
+ZmPR3_Comp = ZmPR3_Comp[ZmPR3_Comp.columns[ZmPR3_Comp.columns.to_series().str.contains('Imputed')]]
+ZmPR3_Comp = pd.concat([ZmPR3CoO, ZmPR3_Comp], axis=1)
+
+Zm3sample_complist = (ZmPR3_Comp.columns[ZmPR3_Comp.columns.to_series().str.contains('3g')])
+print(Zm3sample_complist)
+
 
 Zm3Num = len(Zm3sample_list)
 ZmPR3['Count_RP'] = (ZmPR3.iloc[:,2:(Zm3Num +2)].astype(str) == 'G').sum(axis=1) #Recurrent
@@ -326,12 +354,21 @@ ZmPR3['DP2_Loci_3'] = ((ZmPR3[['Count_RP','Count_Amb','Count_Het']]).sum(axis=1)
 ZmPR4 = gtdataNILAS[(gtdataNILAS['CHROM'] ==  '10') &  (gtdataNILAS['POS'].astype(int).between(10126632, 136329803, inclusive=True))]
 ZmPR4CoO = ZmPR4.filter((Coordinates))
 Compliment = (ZmPR4.columns[~ZmPR4.columns.to_series().str.contains('C')])
+ZmPR4_C = (ZmPR4.columns[ZmPR4.columns.to_series().str.contains('C')])
+ZmPR4_Comp = ZmPR4.filter(ZmPR4_C)
 ZmPR4 = ZmPR4.filter(Compliment)
 ZmPR4 = ZmPR4[ZmPR4.columns[ZmPR4.columns.to_series().str.contains('4g')]]
 ZmPR4 = ZmPR4[ZmPR4.columns[ZmPR4.columns.to_series().str.contains('Imputed')]]
 ZmPR4 = pd.concat([ZmPR4CoO, ZmPR4], axis=1)
 
 Zm4sample_list = (ZmPR4.columns[ZmPR4.columns.to_series().str.contains('4g')])
+
+ZmPR4_Comp = ZmPR4_Comp[ZmPR4_Comp.columns[ZmPR4_Comp.columns.to_series().str.contains('4g')]]
+ZmPR4_Comp = ZmPR4_Comp[ZmPR4_Comp.columns[ZmPR4_Comp.columns.to_series().str.contains('Imputed')]]
+ZmPR4_Comp = pd.concat([ZmPR4CoO, ZmPR4_Comp], axis=1)
+
+Zm4sample_complist = (ZmPR4_Comp.columns[ZmPR4_Comp.columns.to_series().str.contains('4g')])
+print(Zm4sample_complist)
 
 Zm4Num = len(Zm4sample_list)
 ZmPR4['Count_RP'] = (ZmPR4.iloc[:,2:(Zm4Num +2)].astype(str) == 'G').sum(axis=1) #Recurrent
@@ -432,6 +469,8 @@ Zm3sample_list = [x[:-8] for x in Zm3sample_list]
 Zm4sample_list = Zm4sample_list.tolist()
 Zm4sample_list = [x[:-8] for x in Zm4sample_list]
 
+#______ FIG BLOCK 1 ____________________#
+
 NILASZmPR1int  = NILAShap[Zm1sample_list]
 NILASintro1 = pd.concat([CoO_Hap, NILASZmPR1int], axis=1)
 NILAS1Fig= NILASintro1[(NILASintro1['CHROM'] ==  '1') &  (NILASintro1['POS'].astype(int).between(57191440, 185363076, inclusive=True))]
@@ -460,6 +499,49 @@ NILAS4Fig= NILAS4Fig.drop(NILAS4Fig.columns[0:2], axis=1)
 NILAS4Fig= NILAS4Fig.transpose()
 NILAS4Fig.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR4_Fig.txt'), sep='\t')
 
+#___________________________________________________________________________________________________________________#
+
+
+#_________________________FIG BLOCK 2____________________________________________________________________________#
+Zm1sample_complist = Zm1sample_complist.tolist()
+Zm1sample_complist = [x[:-8] for x in Zm1sample_complist]
+Zm2sample_complist = Zm2sample_complist.tolist()
+Zm2sample_complist = [x[:-8] for x in Zm2sample_complist]
+Zm3sample_complist = Zm3sample_complist.tolist()
+Zm3sample_complist = [x[:-8] for x in Zm3sample_complist]
+Zm4sample_complist = Zm4sample_complist.tolist()
+Zm4sample_complist = [x[:-8] for x in Zm4sample_complist]
+
+
+NILASZmPR1comp  = NILAShap[Zm1sample_complist]
+NILAS_comp1 = pd.concat([CoO_Hap, NILASZmPR1comp], axis=1)
+NILAS1figC= NILAS_comp1[(NILAS_comp1['CHROM'] ==  '1') &  (NILAS_comp1['POS'].astype(int).between(57191440, 185363076, inclusive=True))]
+NILAS1figC= NILAS1figC.drop(NILAS1figC.columns[0:2], axis=1)
+NILAS1figC= NILAS1figC.transpose()
+NILAS1figC.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR1_COMP_fig.txt'), sep='\t')
+
+NILASZmPR2comp  = NILAShap[Zm2sample_complist]
+NILAS_comp2 = pd.concat([CoO_Hap, NILASZmPR2comp], axis=1)
+NILAS2figC= NILAS_comp2[(NILAS_comp2['CHROM'] ==  '8') &  (NILAS_comp2['POS'].astype(int).between(97682806, 167995313, inclusive=True))]
+NILAS2figC= NILAS2figC.drop(NILAS2figC.columns[0:2], axis=1)
+NILAS2figC= NILAS2figC.transpose()
+NILAS2figC.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR2_COMP_fig.txt'), sep='\t')
+
+NILASZmPR3comp  = NILAShap[Zm3sample_complist]
+NILAS_comp3 = pd.concat([CoO_Hap, NILASZmPR3comp], axis=1)
+NILAS3figC= NILAS_comp3[(NILAS_comp3['CHROM'] ==  '9') &  (NILAS_comp3['POS'].astype(int).between(7384635, 119857067, inclusive=True))]
+NILAS3figC= NILAS3figC.drop(NILAS3figC.columns[0:2], axis=1)
+NILAS3figC= NILAS3figC.transpose()
+NILAS3figC.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR3_COMP_fig.txt'), sep='\t')
+
+NILASZmPR4comp  = NILAShap[Zm4sample_complist]
+NILAS_comp4 = pd.concat([CoO_Hap, NILASZmPR4comp], axis=1)
+NILAS4figC= NILAS_comp4[(NILAS_comp4['CHROM'] ==  '10') &  (NILAS_comp4['POS'].astype(int).between(10126632, 136329803, inclusive=True))]
+NILAS4figC= NILAS4figC.drop(NILAS4figC.columns[0:2], axis=1)
+NILAS4figC= NILAS4figC.transpose()
+NILAS4figC.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR4_COMP_fig.txt'), sep='\t')
+
+##______________________________________________________________________________________________________________##
 
 NILASencode = gtdataNILAS[gtdataNILAS.columns[~gtdataNILAS.columns.to_series().str.contains('_')]]   
 NILASencode = NILASencode[~NILASencode['CHROM'].str.contains('B73V4_ctg')]
@@ -519,7 +601,7 @@ for sample in NILASlist:
     NILAShap[(sample)+'_Five_Flank_Dis'] = np.where((NILAShap[(sample)+'_Five_Flank'] == 0),
     (NILAShap[(sample)+'_Start'].astype(int) - NILAShap[(sample)+'_Five_Flank'].astype(int)).abs(), NILAShap[(sample)+'_Five_Flank_Dis'] )
     
-    NILAShap[(sample)+'_Three_Flank_Dis'] = (NILAShap[(sample)+'_Three_Flank'].astype(int) - NILAShap[(sample)+'_Stop'].astype(int))
+    NILAShap[(sample)+'_Three_Flank_Dis'] = (NILAShap[(sample)+'_Three_Flank'].astype(int) - NILAShap[(sample)+'_Stop'].astype(int))  ####<==============
     
     NILAShap[(sample)+'_5_BP_Density'] = NILAShap[(sample)+'_Five_Flank_Dis'].div(2)
     NILAShap[(sample)+'_3_BP_Density'] = NILAShap[(sample)+'_Three_Flank_Dis'].div(2)
@@ -527,11 +609,15 @@ for sample in NILASlist:
     NILAShap[(sample)+'_5_Breakpoint'] =  NILAShap[(sample)+'_Start'].astype(int) -  NILAShap[(sample)+'_5_BP_Density']
     
     NILAShap[(sample)+'_3_Breakpoint'] = NILAShap[(sample)+'_Stop'].astype(int) + NILAShap[(sample)+'_3_BP_Density']
+
     
-    NILAShap[(sample)+'_5_Breakpoint'] = np.where((NILAShap[(sample)+'_Five_Flank'] == 0) ,0, NILAShap[(sample)+'_5_Breakpoint'])
+    NILAShap[(sample)+'_5_Breakpoint'] = np.where((NILAShap[(sample)+'_Five_Flank'] == 0) ,0, NILAShap[(sample)+'_5_Breakpoint'])   #<------- One hap block per chromo logic
     NILAShap[(sample)+'_5_Breakpoint'] = np.where((NILAShap[(sample)+'_Hap_No'] == 1) ,0, NILAShap[(sample)+'_5_Breakpoint'])
     NILAShap[(sample)+'_3_Breakpoint'] = np.where((NILAShap[(sample)+'_Hap_No'] == 1) ,0, NILAShap[(sample)+'_3_Breakpoint'])
     NILAShap[(sample)+'_3_Breakpoint'] = np.where((NILAShap[(sample)+'_Three_Flank'] == (NILAShap['CHROM'].map(CHROMend))),(NILAShap['CHROM'].map(CHROMend)), NILAShap[(sample)+'_3_Breakpoint'])
+    
+    NILAShap[(sample)+'_3_Breakpoint'] = np.where((NILAShap[(sample)+'_3_BP_Density'] <= 0),(NILAShap['CHROM'].map(CHROMend)), NILAShap[(sample)+'_3_Breakpoint']) ####<============== NEW LOGIC
+
     
     NILAShap[(sample)+'_PhyLen'] = NILAShap[(sample)+'_3_Breakpoint'].astype(int) - NILAShap[(sample)+'_5_Breakpoint'].astype(int)
     
@@ -543,7 +629,10 @@ NILAShap.set_index('CHROM', inplace=True)
 NILAShap = NILAShap.drop(['POS','DP2_Loci_1','DP2_Loci_2','DP2_Loci_3','DP2_Loci_4'], axis=1)
 NILAShap = NILAShap[NILAShap.columns[~NILAShap.columns.to_series().str.contains('Flank')]]
 
-NILAShap = NILAShap.drop(NILAShap.columns[0], axis=1)
+# NILAShap = NILAShap.drop(NILAShap.columns[0], axis=1)
+
+# print(NILAShap['NILASq1g11i01s2Cp1r1'])
+
 
 for i, g in NILAShap.groupby(by=lambda x: x.split('_')[0], axis=1):
     NILAS_Dict[(i)] = g.groupby(i+'_Haplotype_Block').head(1)
@@ -558,6 +647,7 @@ NILAS_Values['CHROM'] = NILAS_Values.index.get_level_values(1)
 
 ###-------- FOREGROUND---------#####
 ZmPR1 =NILAS_Values[NILAS_Values['Sample'].str.contains('1g')].copy()
+
 
 ZmPR1['Scheme'] = ZmPR1['Sample'].str.extract('(g..)', expand=False)
 ZmPR1['Scheme'] = ZmPR1['Scheme'].map(Scheme_dict)
@@ -613,6 +703,9 @@ ZmPR1['Background_Stop'] = np.where((ZmPR1['ZmPR+'] != 1), (ZmPR1['3_Breakpoint'
 
 ZmPR1['Background_Perc'] = (ZmPR1['Background_Stop'].astype(int) - ZmPR1['Background_Start'].astype(int)).div(B73len)*100
 
+# ZmPR1.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_REVIEW2.txt'), sep='\t', header=True,index=True) #-------------> INQUIRY FILE {Export}
+
+
 ZmPR1 = ZmPR1[ZmPR1.columns[~ZmPR1.columns.to_series().str.contains('Start')]]
 ZmPR1 = ZmPR1[ZmPR1.columns[~ZmPR1.columns.to_series().str.contains('Stop')]]
 ZmPR1 = ZmPR1[ZmPR_list]
@@ -628,278 +721,277 @@ ZmPR1_BG_Geno['Hap_Geno'] = ZmPR1_BG_Geno['Hap_Geno'].map({'DP':'DP_BG','RP':'RP
 
 
 ZmPR1_Geno_Sum = pd.concat([ZmPR1_FG_Geno,ZmPR1_BG_Geno], axis=0)
-ZmPR1_Geno_Sum = ZmPR1_Geno_Sum[~ZmPR1_Geno_Sum['Sample'].str.contains('C')]
+# ZmPR1_Geno_Sum = ZmPR1_Geno_Sum[~ZmPR1_Geno_Sum['Sample'].str.contains('C')]
 ZmPR1_Geno_Sum = ZmPR1_Geno_Sum.fillna(0)
 ZmPR1_Geno_Sum['Perc_Geno'] = ZmPR1_Geno_Sum['Foreground_Perc'] + ZmPR1_Geno_Sum['Background_Perc']
 
 ZmPR1_Geno_Sum = ZmPR1_Geno_Sum.pivot_table(index=['Sample','Scheme','ZmPR'], columns=['Hap_Geno'], values='Perc_Geno', aggfunc='sum')
 ZmPR1_Geno_Sum = ZmPR1_Geno_Sum.fillna(0)
+# print(ZmPR1)
 
-print(ZmPR1)
+ZmPR1I = ZmPR1[~ZmPR1['Sample'].str.contains('C')]
+ZmPR1I.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR1_SUM.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
+ZmPR1C = ZmPR1[ZmPR1['Sample'].str.contains('C')]
+ZmPR1C.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR1_SUMC.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
+ZmPR1_Geno_Sum.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR1_Geno_Sum.txt'), sep='\t', header=True,index=True) #------------->Genotype Percentages {Export}
+##_______ZMPR2______________________________________________________________________________________________###
 
-# ZmPR1I = ZmPR1[~ZmPR1['Sample'].str.contains('C')]
-# ZmPR1I.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR1_SUM.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
-# ZmPR1C = ZmPR1[ZmPR1['Sample'].str.contains('C')]
-# ZmPR1C.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR1_SUMC.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
-# ZmPR1_Geno_Sum.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR1_Geno_Sum.txt'), sep='\t', header=True,index=True) #------------->Genotype Percentages {Export} {Export}
-# ##_______ZMPR2______________________________________________________________________________________________###
-# 
-# ###-------- FOREGROUND---------#####
-# ZmPR2 =NILAS_Values[NILAS_Values['Sample'].str.contains('2g')].copy()
-# 
-# ZmPR2['Scheme'] = ZmPR2['Sample'].str.extract('(g..)', expand=None)
-# ZmPR2['Scheme'] = ZmPR2['Scheme'].map(Scheme_dict)
-# 
-# ZmPR2['ZmPR'] = ZmPR2['Sample'].str.extract('q(.)', expand=None)
-# 
-# ZmPR2['Hap_Geno'] = ZmPR2['Hap_Geno'].map(Geno_dict)
-# 
-# ZmPR2['5_Breakpoint'] = ZmPR2['5_Breakpoint'].astype(float)
-# ZmPR2['3_Breakpoint'] = ZmPR2['3_Breakpoint'].astype(float)
-# 
-# ZmPR2['ZmPR+'] = np.where(((ZmPR2['5_Breakpoint'].astype(float)).between(97682806, 167995313, inclusive=True) & (ZmPR2['CHROM'] ==  '8') |
-#      (ZmPR2['3_Breakpoint'].astype(float).between(97682806, 167995313, inclusive=True)) & (ZmPR2['CHROM'] ==  '8')),1,0)
-# 
-# ZmPR2['Foreground_Start'] = np.where((ZmPR2['ZmPR+'] == 1) & (ZmPR2['5_Breakpoint'].astype(int) < 97682806 ), 97682806, ZmPR2['5_Breakpoint'])
-# ZmPR2['Foreground_Start'] = np.where((ZmPR2['ZmPR+'] != 1), 0, ZmPR2['Foreground_Start'])
-# 
-# ZmPR2['Foreground_Stop'] = np.where((ZmPR2['ZmPR+'] == 1) & (ZmPR2['3_Breakpoint'].astype(int) > 167995313 ), 167995313, ZmPR2['3_Breakpoint'])
-# ZmPR2['Foreground_Stop'] = np.where((ZmPR2['ZmPR+'] != 1), 0, ZmPR2['Foreground_Stop'])
-#  
-# ZmPR2['Foreground_Perc'] = np.where((ZmPR2['ZmPR+'] == 1),
-#     ((ZmPR2['Foreground_Stop'].astype(int) - ZmPR2['Foreground_Start'].astype(int)).div(B73len)*100),0)
-# 
-# ZmPR2['FG_5_BP_Density']= np.where((ZmPR2['ZmPR+'] == 1),ZmPR2['5_BP_Density'],0)
-# ZmPR2['FG_3_BP_Density']= np.where((ZmPR2['ZmPR+'] == 1),ZmPR2['3_BP_Density'],0)
-# 
-# ###-------- Background---------#####
-# 
-# ZmPR2['BG_5_BP_Density']= np.where((ZmPR2['ZmPR+'] != 1),ZmPR2['5_BP_Density'],0)
-# ZmPR2['BG_3_BP_Density']= np.where((ZmPR2['ZmPR+'] != 1),ZmPR2['3_BP_Density'],0)
-# 
-# #Starts in background; stops in ZmPR scenario
-# ZmPR2['Background_Start'] = np.where(((ZmPR2['ZmPR+'] == 1) & (ZmPR2['5_Breakpoint'].astype(int) < 97682806 ) &
-#     (ZmPR2['3_Breakpoint'].astype(int) < 167995313 )),(ZmPR2['5_Breakpoint']), (0))
-# ZmPR2['Background_Stop'] = np.where(((ZmPR2['ZmPR+'] == 1) & (ZmPR2['5_Breakpoint'].astype(int) < 97682806 ) &
-#     (ZmPR2['3_Breakpoint'].astype(int) < 167995313 )),(97682806), (0))
-# 
-# #Starts in ZmPR; stops in background scenario
-# ZmPR2['Background_Start'] = np.where(((ZmPR2['ZmPR+'] == 1) & (ZmPR2['5_Breakpoint'].astype(int) < 167995313 ) &
-#     (ZmPR2['3_Breakpoint'].astype(int) > 167995313 )),(167995313), (ZmPR2['Background_Start'])) 
-# ZmPR2['Background_Stop'] = np.where(((ZmPR2['ZmPR+'] == 1) & (ZmPR2['5_Breakpoint'].astype(float)).between(97682806, 167995313, inclusive=True) &
-#     (ZmPR2['3_Breakpoint'].astype(int) > 167995313 )),(ZmPR2['3_Breakpoint']), (ZmPR2['Background_Stop']))
-# 
-# #Starts and stops in ZmPR scenario
-# ZmPR2['Background_Start'] = np.where(((ZmPR2['ZmPR+'] == 1) & (ZmPR2['5_Breakpoint'].astype(int) > 97682806 ) &
-#     (ZmPR2['3_Breakpoint'].astype(int) < 167995313 )),(0), (ZmPR2['Background_Start']))
-# ZmPR2['Background_Stop'] = np.where(((ZmPR2['ZmPR+'] == 1) & (ZmPR2['5_Breakpoint'].astype(int) > 97682806 ) &
-#     (ZmPR2['3_Breakpoint'].astype(int) < 167995313 )),(0), (ZmPR2['Background_Stop']))
-# 
-# #Starts and stops in background scenario
-# ZmPR2['Background_Start'] = np.where((ZmPR2['ZmPR+'] != 1), (ZmPR2['5_Breakpoint']), (ZmPR2['Background_Start']))
-# ZmPR2['Background_Stop'] = np.where((ZmPR2['ZmPR+'] != 1), (ZmPR2['3_Breakpoint']), (ZmPR2['Background_Stop']))
-# 
-# ZmPR2['Background_Perc'] = (ZmPR2['Background_Stop'].astype(int) - ZmPR2['Background_Start'].astype(int)).div(B73len)*100
-# 
-# ZmPR2 = ZmPR2[ZmPR2.columns[~ZmPR2.columns.to_series().str.contains('Start')]]
-# ZmPR2 = ZmPR2[ZmPR2.columns[~ZmPR2.columns.to_series().str.contains('Stop')]]
-# ZmPR2 = ZmPR2[ZmPR_list]
-# 
-# FG2 = ['Sample','Scheme', 'ZmPR','Hap_Geno','Foreground_Perc']
-# ZmPR2_FG_Geno = ZmPR2.filter((FG2))
-# ZmPR2_FG_Geno['Hap_Geno'] = ZmPR2_FG_Geno['Hap_Geno'].map({'DP':'DP_FG','RP':'RP_FG', 'NA':'NA_FG','Het':'Het_FG'})
-# 
-# 
-# BG2 = ['Sample','Scheme', 'ZmPR','Hap_Geno','Background_Perc']
-# ZmPR2_BG_Geno = ZmPR2.filter((BG2))
-# ZmPR2_BG_Geno['Hap_Geno'] = ZmPR2_BG_Geno['Hap_Geno'].map({'DP':'DP_BG','RP':'RP_BG', 'NA':'NA_BG','Het':'Het_BG'})
-# 
-# 
-# ZmPR2_Geno_Sum = pd.concat([ZmPR2_FG_Geno,ZmPR2_BG_Geno], axis=0)
-# ZmPR2_Geno_Sum = ZmPR2_Geno_Sum[~ZmPR2_Geno_Sum['Sample'].str.contains('C')]
-# ZmPR2_Geno_Sum = ZmPR2_Geno_Sum.fillna(0)
-# ZmPR2_Geno_Sum['Perc_Geno'] = ZmPR2_Geno_Sum['Foreground_Perc'] + ZmPR2_Geno_Sum['Background_Perc']
-# 
-# ZmPR2_Geno_Sum = ZmPR2_Geno_Sum.pivot_table(index=['Sample','Scheme','ZmPR'], columns=['Hap_Geno'], values='Perc_Geno', aggfunc='sum')
-# ZmPR2_Geno_Sum = ZmPR2_Geno_Sum.fillna(0)
-# 
-# ZmPR2I = ZmPR2[~ZmPR2['Sample'].str.contains('C')]
-# ZmPR2I.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR2_SUM.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
-# ZmPR2C = ZmPR2[ZmPR2['Sample'].str.contains('C')]
-# ZmPR2C.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR2_SUMC.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
-# ZmPR2_Geno_Sum.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR2_Geno_Sum.txt'), sep='\t', header=True,index=True) #------------->Genotype Percentages {Export} {Export}
-# 
-# ###_______ZMPR3______________________________________________________________________________________________###
-# 
-# ###-------- FOREGROUND---------#####
-# ZmPR3 =NILAS_Values[NILAS_Values['Sample'].str.contains('3g')].copy()
-# 
-# ZmPR3['Scheme'] = ZmPR3['Sample'].str.extract('(g..)', expand=None)
-# ZmPR3['Scheme'] = ZmPR3['Scheme'].map(Scheme_dict)
-# 
-# ZmPR3['ZmPR'] = ZmPR3['Sample'].str.extract('q(.)', expand=None)
-# 
-# ZmPR3['Hap_Geno'] = ZmPR3['Hap_Geno'].map(Geno_dict)
-# 
-# ZmPR3['5_Breakpoint'] = ZmPR3['5_Breakpoint'].astype(float)
-# ZmPR3['3_Breakpoint'] = ZmPR3['3_Breakpoint'].astype(float)
-# 
-# ZmPR3['ZmPR+'] = np.where(((ZmPR3['5_Breakpoint'].astype(float)).between(7384635, 119857067, inclusive=True) & (ZmPR3['CHROM'] ==  '9') |
-#      (ZmPR3['3_Breakpoint'].astype(float).between(7384635, 119857067, inclusive=True)) & (ZmPR3['CHROM'] ==  '9')),1,0)
-# 
-# ZmPR3['Foreground_Start'] = np.where((ZmPR3['ZmPR+'] == 1) & (ZmPR3['5_Breakpoint'].astype(int) < 7384635 ), 7384635, ZmPR3['5_Breakpoint'])
-# ZmPR3['Foreground_Start'] = np.where((ZmPR3['ZmPR+'] != 1), 0, ZmPR3['Foreground_Start'])
-# 
-# ZmPR3['Foreground_Stop'] = np.where((ZmPR3['ZmPR+'] == 1) & (ZmPR3['3_Breakpoint'].astype(int) > 119857067 ), 119857067, ZmPR3['3_Breakpoint'])
-# ZmPR3['Foreground_Stop'] = np.where((ZmPR3['ZmPR+'] != 1), 0, ZmPR3['Foreground_Stop'])
-#  
-# ZmPR3['Foreground_Perc'] = np.where((ZmPR3['ZmPR+'] == 1),
-#     ((ZmPR3['Foreground_Stop'].astype(int) - ZmPR3['Foreground_Start'].astype(int)).div(B73len)*100),0)
-# 
-# ZmPR3['FG_5_BP_Density']= np.where((ZmPR3['ZmPR+'] == 1),ZmPR3['5_BP_Density'],0)
-# ZmPR3['FG_3_BP_Density']= np.where((ZmPR3['ZmPR+'] == 1),ZmPR3['3_BP_Density'],0)
-# 
-# ###-------- Background---------#####
-# 
-# ZmPR3['BG_5_BP_Density']= np.where((ZmPR3['ZmPR+'] != 1),ZmPR3['5_BP_Density'],0)
-# ZmPR3['BG_3_BP_Density']= np.where((ZmPR3['ZmPR+'] != 1),ZmPR3['3_BP_Density'],0)
-# 
-# #Starts in background; stops in ZmPR scenario
-# ZmPR3['Background_Start'] = np.where(((ZmPR3['ZmPR+'] == 1) & (ZmPR3['5_Breakpoint'].astype(int) < 7384635 ) &
-#     (ZmPR3['3_Breakpoint'].astype(int) < 119857067 )),(ZmPR3['5_Breakpoint']), (0))
-# ZmPR3['Background_Stop'] = np.where(((ZmPR3['ZmPR+'] == 1) & (ZmPR3['5_Breakpoint'].astype(int) < 7384635 ) &
-#     (ZmPR3['3_Breakpoint'].astype(int) < 119857067 )),(7384635), (0))
-# 
-# #Starts in ZmPR; stops in background scenario
-# ZmPR3['Background_Start'] = np.where(((ZmPR3['ZmPR+'] == 1) & (ZmPR3['5_Breakpoint'].astype(int) < 119857067 ) &
-#     (ZmPR3['3_Breakpoint'].astype(int) > 119857067 )),(119857067), (ZmPR3['Background_Start'])) 
-# ZmPR3['Background_Stop'] = np.where(((ZmPR3['ZmPR+'] == 1) & (ZmPR3['5_Breakpoint'].astype(float)).between(7384635, 119857067, inclusive=True) &
-#     (ZmPR3['3_Breakpoint'].astype(int) > 119857067 )),(ZmPR3['3_Breakpoint']), (ZmPR3['Background_Stop']))
-# 
-# #Starts and stops in ZmPR scenario
-# ZmPR3['Background_Start'] = np.where(((ZmPR3['ZmPR+'] == 1) & (ZmPR3['5_Breakpoint'].astype(int) > 7384635 ) &
-#     (ZmPR3['3_Breakpoint'].astype(int) < 119857067 )),(0), (ZmPR3['Background_Start']))
-# ZmPR3['Background_Stop'] = np.where(((ZmPR3['ZmPR+'] == 1) & (ZmPR3['5_Breakpoint'].astype(int) > 7384635 ) &
-#     (ZmPR3['3_Breakpoint'].astype(int) < 119857067 )),(0), (ZmPR3['Background_Stop']))
-# 
-# #Starts and stops in background scenario
-# ZmPR3['Background_Start'] = np.where((ZmPR3['ZmPR+'] != 1), (ZmPR3['5_Breakpoint']), (ZmPR3['Background_Start']))
-# ZmPR3['Background_Stop'] = np.where((ZmPR3['ZmPR+'] != 1), (ZmPR3['3_Breakpoint']), (ZmPR3['Background_Stop']))
-# 
-# ZmPR3['Background_Perc'] = (ZmPR3['Background_Stop'].astype(int) - ZmPR3['Background_Start'].astype(int)).div(B73len)*100
-# 
-# ZmPR3 = ZmPR3[ZmPR3.columns[~ZmPR3.columns.to_series().str.contains('Start')]]
-# ZmPR3 = ZmPR3[ZmPR3.columns[~ZmPR3.columns.to_series().str.contains('Stop')]]
-# ZmPR3 = ZmPR3[ZmPR_list]
-# 
-# FG3 = ['Sample','Scheme', 'ZmPR','Hap_Geno','Foreground_Perc']
-# ZmPR3_FG_Geno = ZmPR3.filter((FG3))
-# ZmPR3_FG_Geno['Hap_Geno'] = ZmPR3_FG_Geno['Hap_Geno'].map({'DP':'DP_FG','RP':'RP_FG', 'NA':'NA_FG','Het':'Het_FG'})
-# 
-# 
-# BG3 = ['Sample','Scheme', 'ZmPR','Hap_Geno','Background_Perc']
-# ZmPR3_BG_Geno = ZmPR3.filter((BG3))
-# ZmPR3_BG_Geno['Hap_Geno'] = ZmPR3_BG_Geno['Hap_Geno'].map({'DP':'DP_BG','RP':'RP_BG', 'NA':'NA_BG','Het':'Het_BG'})
-# 
-# 
-# ZmPR3_Geno_Sum = pd.concat([ZmPR3_FG_Geno,ZmPR3_BG_Geno], axis=0)
-# ZmPR3_Geno_Sum = ZmPR3_Geno_Sum[~ZmPR3_Geno_Sum['Sample'].str.contains('C')]
-# ZmPR3_Geno_Sum = ZmPR3_Geno_Sum.fillna(0)
-# ZmPR3_Geno_Sum['Perc_Geno'] = ZmPR3_Geno_Sum['Foreground_Perc'] + ZmPR3_Geno_Sum['Background_Perc']
-# 
-# ZmPR3_Geno_Sum = ZmPR3_Geno_Sum.pivot_table(index=['Sample','Scheme','ZmPR'], columns=['Hap_Geno'], values='Perc_Geno', aggfunc='sum')
-# ZmPR3_Geno_Sum = ZmPR3_Geno_Sum.fillna(0)
-# 
-# ZmPR3I = ZmPR3[~ZmPR3['Sample'].str.contains('C')]
-# ZmPR3I.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR3_SUM.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
-# ZmPR3C = ZmPR3[ZmPR3['Sample'].str.contains('C')]
-# ZmPR3C.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR3_SUMC.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
-# ZmPR3_Geno_Sum.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR3_Geno_Sum.txt'), sep='\t', header=True,index=True) #------------->Genotype Percentages {Export}
-# 
-# ###_______ZMPR4______________________________________________________________________________________________###
-# 
-# ###-------- FOREGROUND---------#####
-# ZmPR4 =NILAS_Values[NILAS_Values['Sample'].str.contains('4g')].copy()
-# 
-# ZmPR4['Scheme'] = ZmPR4['Sample'].str.extract('(g..)', expand=None)
-# ZmPR4['Scheme'] = ZmPR4['Scheme'].map(Scheme_dict)
-# 
-# ZmPR4['ZmPR'] = ZmPR4['Sample'].str.extract('q(.)', expand=None)
-# 
-# ZmPR4['Hap_Geno'] = ZmPR4['Hap_Geno'].map(Geno_dict)
-# 
-# ZmPR4['5_Breakpoint'] = ZmPR4['5_Breakpoint'].astype(float)
-# ZmPR4['3_Breakpoint'] = ZmPR4['3_Breakpoint'].astype(float)
-# 
-# ZmPR4['ZmPR+'] = np.where(((ZmPR4['5_Breakpoint'].astype(float)).between(10126632, 136329803, inclusive=True) & (ZmPR4['CHROM'] ==  '10') |
-#      (ZmPR4['3_Breakpoint'].astype(float).between(10126632, 136329803, inclusive=True)) & (ZmPR4['CHROM'] ==  '10')),1,0)
-# 
-# ZmPR4['Foreground_Start'] = np.where((ZmPR4['ZmPR+'] == 1) & (ZmPR4['5_Breakpoint'].astype(int) < 10126632 ), 10126632, ZmPR4['5_Breakpoint'])
-# ZmPR4['Foreground_Start'] = np.where((ZmPR4['ZmPR+'] != 1), 0, ZmPR4['Foreground_Start'])
-# 
-# ZmPR4['Foreground_Stop'] = np.where((ZmPR4['ZmPR+'] == 1) & (ZmPR4['3_Breakpoint'].astype(int) > 136329803 ), 136329803, ZmPR4['3_Breakpoint'])
-# ZmPR4['Foreground_Stop'] = np.where((ZmPR4['ZmPR+'] != 1), 0, ZmPR4['Foreground_Stop'])
-#  
-# ZmPR4['Foreground_Perc'] = np.where((ZmPR4['ZmPR+'] == 1),
-#     ((ZmPR4['Foreground_Stop'].astype(int) - ZmPR4['Foreground_Start'].astype(int)).div(B73len)*100),0)
-# 
-# ZmPR4['FG_5_BP_Density']= np.where((ZmPR4['ZmPR+'] == 1),ZmPR4['5_BP_Density'],0)
-# ZmPR4['FG_3_BP_Density']= np.where((ZmPR4['ZmPR+'] == 1),ZmPR4['3_BP_Density'],0)
-# 
-# ###-------- Background---------#####
-# 
-# ZmPR4['BG_5_BP_Density']= np.where((ZmPR4['ZmPR+'] != 1),ZmPR4['5_BP_Density'],0)
-# ZmPR4['BG_3_BP_Density']= np.where((ZmPR4['ZmPR+'] != 1),ZmPR4['3_BP_Density'],0)
-# 
-# #Starts in background; stops in ZmPR scenario
-# ZmPR4['Background_Start'] = np.where(((ZmPR4['ZmPR+'] == 1) & (ZmPR4['5_Breakpoint'].astype(int) < 10126632 ) &
-#     (ZmPR4['3_Breakpoint'].astype(int) < 136329803 )),(ZmPR4['5_Breakpoint']), (0))
-# ZmPR4['Background_Stop'] = np.where(((ZmPR4['ZmPR+'] == 1) & (ZmPR4['5_Breakpoint'].astype(int) < 10126632 ) &
-#     (ZmPR4['3_Breakpoint'].astype(int) < 136329803 )),(10126632), (0))
-# 
-# #Starts in ZmPR; stops in background scenario
-# ZmPR4['Background_Start'] = np.where(((ZmPR4['ZmPR+'] == 1) & (ZmPR4['5_Breakpoint'].astype(int) < 136329803 ) &
-#     (ZmPR4['3_Breakpoint'].astype(int) > 136329803 )),(136329803), (ZmPR4['Background_Start'])) 
-# ZmPR4['Background_Stop'] = np.where(((ZmPR4['ZmPR+'] == 1) & (ZmPR4['5_Breakpoint'].astype(float)).between(10126632, 136329803, inclusive=True) &
-#     (ZmPR4['3_Breakpoint'].astype(int) > 136329803 )),(ZmPR4['3_Breakpoint']), (ZmPR4['Background_Stop']))
-# 
-# #Starts and stops in ZmPR scenario
-# ZmPR4['Background_Start'] = np.where(((ZmPR4['ZmPR+'] == 1) & (ZmPR4['5_Breakpoint'].astype(int) > 10126632 ) &
-#     (ZmPR4['3_Breakpoint'].astype(int) < 136329803 )),(0), (ZmPR4['Background_Start']))
-# ZmPR4['Background_Stop'] = np.where(((ZmPR4['ZmPR+'] == 1) & (ZmPR4['5_Breakpoint'].astype(int) > 10126632 ) &
-#     (ZmPR4['3_Breakpoint'].astype(int) < 136329803 )),(0), (ZmPR4['Background_Stop']))
-# 
-# #Starts and stops in background scenario
-# ZmPR4['Background_Start'] = np.where((ZmPR4['ZmPR+'] != 1), (ZmPR4['5_Breakpoint']), (ZmPR4['Background_Start']))
-# ZmPR4['Background_Stop'] = np.where((ZmPR4['ZmPR+'] != 1), (ZmPR4['3_Breakpoint']), (ZmPR4['Background_Stop']))
-# 
-# ZmPR4['Background_Perc'] = (ZmPR4['Background_Stop'].astype(int) - ZmPR4['Background_Start'].astype(int)).div(B73len)*100
-# 
-# ZmPR4 = ZmPR4[ZmPR4.columns[~ZmPR4.columns.to_series().str.contains('Start')]]
-# ZmPR4 = ZmPR4[ZmPR4.columns[~ZmPR4.columns.to_series().str.contains('Stop')]]
-# ZmPR4 = ZmPR4[ZmPR_list]
-# 
-# FG4 = ['Sample','Scheme', 'ZmPR','Hap_Geno','Foreground_Perc']
-# ZmPR4_FG_Geno = ZmPR4.filter((FG4))
-# ZmPR4_FG_Geno['Hap_Geno'] = ZmPR4_FG_Geno['Hap_Geno'].map({'DP':'DP_FG','RP':'RP_FG', 'NA':'NA_FG','Het':'Het_FG'})
-# 
-# 
-# BG4 = ['Sample','Scheme', 'ZmPR','Hap_Geno','Background_Perc']
-# ZmPR4_BG_Geno = ZmPR4.filter((BG4))
-# ZmPR4_BG_Geno['Hap_Geno'] = ZmPR4_BG_Geno['Hap_Geno'].map({'DP':'DP_BG','RP':'RP_BG', 'NA':'NA_BG','Het':'Het_BG'})
-# 
-# 
-# ZmPR4_Geno_Sum = pd.concat([ZmPR4_FG_Geno,ZmPR4_BG_Geno], axis=0)
-# ZmPR4_Geno_Sum = ZmPR4_Geno_Sum[~ZmPR4_Geno_Sum['Sample'].str.contains('C')]
-# ZmPR4_Geno_Sum = ZmPR4_Geno_Sum.fillna(0)
-# ZmPR4_Geno_Sum['Perc_Geno'] = ZmPR4_Geno_Sum['Foreground_Perc'] + ZmPR4_Geno_Sum['Background_Perc']
-# 
-# ZmPR4_Geno_Sum = ZmPR4_Geno_Sum.pivot_table(index=['Sample','Scheme','ZmPR'], columns=['Hap_Geno'], values='Perc_Geno', aggfunc='sum')
-# ZmPR4_Geno_Sum = ZmPR4_Geno_Sum.fillna(0)
-# 
-# ZmPR4I = ZmPR4[~ZmPR4['Sample'].str.contains('C')]
-# ZmPR4I.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR4_SUM.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
-# ZmPR4C = ZmPR4[ZmPR4['Sample'].str.contains('C')]
+###-------- FOREGROUND---------#####
+ZmPR2 =NILAS_Values[NILAS_Values['Sample'].str.contains('2g')].copy()
+
+ZmPR2['Scheme'] = ZmPR2['Sample'].str.extract('(g..)', expand=None)
+ZmPR2['Scheme'] = ZmPR2['Scheme'].map(Scheme_dict)
+
+ZmPR2['ZmPR'] = ZmPR2['Sample'].str.extract('q(.)', expand=None)
+
+ZmPR2['Hap_Geno'] = ZmPR2['Hap_Geno'].map(Geno_dict)
+
+ZmPR2['5_Breakpoint'] = ZmPR2['5_Breakpoint'].astype(float)
+ZmPR2['3_Breakpoint'] = ZmPR2['3_Breakpoint'].astype(float)
+
+ZmPR2['ZmPR+'] = np.where(((ZmPR2['5_Breakpoint'].astype(float)).between(97682806, 167995313, inclusive=True) & (ZmPR2['CHROM'] ==  '8') |
+     (ZmPR2['3_Breakpoint'].astype(float).between(97682806, 167995313, inclusive=True)) & (ZmPR2['CHROM'] ==  '8')),1,0)
+
+ZmPR2['Foreground_Start'] = np.where((ZmPR2['ZmPR+'] == 1) & (ZmPR2['5_Breakpoint'].astype(int) < 97682806 ), 97682806, ZmPR2['5_Breakpoint'])
+ZmPR2['Foreground_Start'] = np.where((ZmPR2['ZmPR+'] != 1), 0, ZmPR2['Foreground_Start'])
+
+ZmPR2['Foreground_Stop'] = np.where((ZmPR2['ZmPR+'] == 1) & (ZmPR2['3_Breakpoint'].astype(int) > 167995313 ), 167995313, ZmPR2['3_Breakpoint'])
+ZmPR2['Foreground_Stop'] = np.where((ZmPR2['ZmPR+'] != 1), 0, ZmPR2['Foreground_Stop'])
+ 
+ZmPR2['Foreground_Perc'] = np.where((ZmPR2['ZmPR+'] == 1),
+    ((ZmPR2['Foreground_Stop'].astype(int) - ZmPR2['Foreground_Start'].astype(int)).div(B73len)*100),0)
+
+ZmPR2['FG_5_BP_Density']= np.where((ZmPR2['ZmPR+'] == 1),ZmPR2['5_BP_Density'],0)
+ZmPR2['FG_3_BP_Density']= np.where((ZmPR2['ZmPR+'] == 1),ZmPR2['3_BP_Density'],0)
+
+###-------- Background---------#####
+
+ZmPR2['BG_5_BP_Density']= np.where((ZmPR2['ZmPR+'] != 1),ZmPR2['5_BP_Density'],0)
+ZmPR2['BG_3_BP_Density']= np.where((ZmPR2['ZmPR+'] != 1),ZmPR2['3_BP_Density'],0)
+
+#Starts in background; stops in ZmPR scenario
+ZmPR2['Background_Start'] = np.where(((ZmPR2['ZmPR+'] == 1) & (ZmPR2['5_Breakpoint'].astype(int) < 97682806 ) &
+    (ZmPR2['3_Breakpoint'].astype(int) < 167995313 )),(ZmPR2['5_Breakpoint']), (0))
+ZmPR2['Background_Stop'] = np.where(((ZmPR2['ZmPR+'] == 1) & (ZmPR2['5_Breakpoint'].astype(int) < 97682806 ) &
+    (ZmPR2['3_Breakpoint'].astype(int) < 167995313 )),(97682806), (0))
+
+#Starts in ZmPR; stops in background scenario
+ZmPR2['Background_Start'] = np.where(((ZmPR2['ZmPR+'] == 1) & (ZmPR2['5_Breakpoint'].astype(int) < 167995313 ) &
+    (ZmPR2['3_Breakpoint'].astype(int) > 167995313 )),(167995313), (ZmPR2['Background_Start'])) 
+ZmPR2['Background_Stop'] = np.where(((ZmPR2['ZmPR+'] == 1) & (ZmPR2['5_Breakpoint'].astype(float)).between(97682806, 167995313, inclusive=True) &
+    (ZmPR2['3_Breakpoint'].astype(int) > 167995313 )),(ZmPR2['3_Breakpoint']), (ZmPR2['Background_Stop']))
+
+#Starts and stops in ZmPR scenario
+ZmPR2['Background_Start'] = np.where(((ZmPR2['ZmPR+'] == 1) & (ZmPR2['5_Breakpoint'].astype(int) > 97682806 ) &
+    (ZmPR2['3_Breakpoint'].astype(int) < 167995313 )),(0), (ZmPR2['Background_Start']))
+ZmPR2['Background_Stop'] = np.where(((ZmPR2['ZmPR+'] == 1) & (ZmPR2['5_Breakpoint'].astype(int) > 97682806 ) &
+    (ZmPR2['3_Breakpoint'].astype(int) < 167995313 )),(0), (ZmPR2['Background_Stop']))
+
+#Starts and stops in background scenario
+ZmPR2['Background_Start'] = np.where((ZmPR2['ZmPR+'] != 1), (ZmPR2['5_Breakpoint']), (ZmPR2['Background_Start']))
+ZmPR2['Background_Stop'] = np.where((ZmPR2['ZmPR+'] != 1), (ZmPR2['3_Breakpoint']), (ZmPR2['Background_Stop']))
+
+ZmPR2['Background_Perc'] = (ZmPR2['Background_Stop'].astype(int) - ZmPR2['Background_Start'].astype(int)).div(B73len)*100
+
+ZmPR2 = ZmPR2[ZmPR2.columns[~ZmPR2.columns.to_series().str.contains('Start')]]
+ZmPR2 = ZmPR2[ZmPR2.columns[~ZmPR2.columns.to_series().str.contains('Stop')]]
+ZmPR2 = ZmPR2[ZmPR_list]
+
+FG2 = ['Sample','Scheme', 'ZmPR','Hap_Geno','Foreground_Perc']
+ZmPR2_FG_Geno = ZmPR2.filter((FG2))
+ZmPR2_FG_Geno['Hap_Geno'] = ZmPR2_FG_Geno['Hap_Geno'].map({'DP':'DP_FG','RP':'RP_FG', 'NA':'NA_FG','Het':'Het_FG'})
+
+
+BG2 = ['Sample','Scheme', 'ZmPR','Hap_Geno','Background_Perc']
+ZmPR2_BG_Geno = ZmPR2.filter((BG2))
+ZmPR2_BG_Geno['Hap_Geno'] = ZmPR2_BG_Geno['Hap_Geno'].map({'DP':'DP_BG','RP':'RP_BG', 'NA':'NA_BG','Het':'Het_BG'})
+
+
+ZmPR2_Geno_Sum = pd.concat([ZmPR2_FG_Geno,ZmPR2_BG_Geno], axis=0)
+ZmPR2_Geno_Sum = ZmPR2_Geno_Sum[~ZmPR2_Geno_Sum['Sample'].str.contains('C')]
+ZmPR2_Geno_Sum = ZmPR2_Geno_Sum.fillna(0)
+ZmPR2_Geno_Sum['Perc_Geno'] = ZmPR2_Geno_Sum['Foreground_Perc'] + ZmPR2_Geno_Sum['Background_Perc']
+
+ZmPR2_Geno_Sum = ZmPR2_Geno_Sum.pivot_table(index=['Sample','Scheme','ZmPR'], columns=['Hap_Geno'], values='Perc_Geno', aggfunc='sum')
+ZmPR2_Geno_Sum = ZmPR2_Geno_Sum.fillna(0)
+
+ZmPR2I = ZmPR2[~ZmPR2['Sample'].str.contains('C')]
+ZmPR2I.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR2_SUM.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
+ZmPR2C = ZmPR2[ZmPR2['Sample'].str.contains('C')]
+ZmPR2C.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR2_SUMC.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
+ZmPR2_Geno_Sum.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR2_Geno_Sum.txt'), sep='\t', header=True,index=True) #------------->Genotype Percentages {Export} {Export}
+
+###_______ZMPR3______________________________________________________________________________________________###
+
+###-------- FOREGROUND---------#####
+ZmPR3 =NILAS_Values[NILAS_Values['Sample'].str.contains('3g')].copy()
+
+ZmPR3['Scheme'] = ZmPR3['Sample'].str.extract('(g..)', expand=None)
+ZmPR3['Scheme'] = ZmPR3['Scheme'].map(Scheme_dict)
+
+ZmPR3['ZmPR'] = ZmPR3['Sample'].str.extract('q(.)', expand=None)
+
+ZmPR3['Hap_Geno'] = ZmPR3['Hap_Geno'].map(Geno_dict)
+
+ZmPR3['5_Breakpoint'] = ZmPR3['5_Breakpoint'].astype(float)
+ZmPR3['3_Breakpoint'] = ZmPR3['3_Breakpoint'].astype(float)
+
+ZmPR3['ZmPR+'] = np.where(((ZmPR3['5_Breakpoint'].astype(float)).between(7384635, 119857067, inclusive=True) & (ZmPR3['CHROM'] ==  '9') |
+     (ZmPR3['3_Breakpoint'].astype(float).between(7384635, 119857067, inclusive=True)) & (ZmPR3['CHROM'] ==  '9')),1,0)
+
+ZmPR3['Foreground_Start'] = np.where((ZmPR3['ZmPR+'] == 1) & (ZmPR3['5_Breakpoint'].astype(int) < 7384635 ), 7384635, ZmPR3['5_Breakpoint'])
+ZmPR3['Foreground_Start'] = np.where((ZmPR3['ZmPR+'] != 1), 0, ZmPR3['Foreground_Start'])
+
+ZmPR3['Foreground_Stop'] = np.where((ZmPR3['ZmPR+'] == 1) & (ZmPR3['3_Breakpoint'].astype(int) > 119857067 ), 119857067, ZmPR3['3_Breakpoint'])
+ZmPR3['Foreground_Stop'] = np.where((ZmPR3['ZmPR+'] != 1), 0, ZmPR3['Foreground_Stop'])
+ 
+ZmPR3['Foreground_Perc'] = np.where((ZmPR3['ZmPR+'] == 1),
+    ((ZmPR3['Foreground_Stop'].astype(int) - ZmPR3['Foreground_Start'].astype(int)).div(B73len)*100),0)
+
+ZmPR3['FG_5_BP_Density']= np.where((ZmPR3['ZmPR+'] == 1),ZmPR3['5_BP_Density'],0)
+ZmPR3['FG_3_BP_Density']= np.where((ZmPR3['ZmPR+'] == 1),ZmPR3['3_BP_Density'],0)
+
+###-------- Background---------#####
+
+ZmPR3['BG_5_BP_Density']= np.where((ZmPR3['ZmPR+'] != 1),ZmPR3['5_BP_Density'],0)
+ZmPR3['BG_3_BP_Density']= np.where((ZmPR3['ZmPR+'] != 1),ZmPR3['3_BP_Density'],0)
+
+#Starts in background; stops in ZmPR scenario
+ZmPR3['Background_Start'] = np.where(((ZmPR3['ZmPR+'] == 1) & (ZmPR3['5_Breakpoint'].astype(int) < 7384635 ) &
+    (ZmPR3['3_Breakpoint'].astype(int) < 119857067 )),(ZmPR3['5_Breakpoint']), (0))
+ZmPR3['Background_Stop'] = np.where(((ZmPR3['ZmPR+'] == 1) & (ZmPR3['5_Breakpoint'].astype(int) < 7384635 ) &
+    (ZmPR3['3_Breakpoint'].astype(int) < 119857067 )),(7384635), (0))
+
+#Starts in ZmPR; stops in background scenario
+ZmPR3['Background_Start'] = np.where(((ZmPR3['ZmPR+'] == 1) & (ZmPR3['5_Breakpoint'].astype(int) < 119857067 ) &
+    (ZmPR3['3_Breakpoint'].astype(int) > 119857067 )),(119857067), (ZmPR3['Background_Start'])) 
+ZmPR3['Background_Stop'] = np.where(((ZmPR3['ZmPR+'] == 1) & (ZmPR3['5_Breakpoint'].astype(float)).between(7384635, 119857067, inclusive=True) &
+    (ZmPR3['3_Breakpoint'].astype(int) > 119857067 )),(ZmPR3['3_Breakpoint']), (ZmPR3['Background_Stop']))
+
+#Starts and stops in ZmPR scenario
+ZmPR3['Background_Start'] = np.where(((ZmPR3['ZmPR+'] == 1) & (ZmPR3['5_Breakpoint'].astype(int) > 7384635 ) &
+    (ZmPR3['3_Breakpoint'].astype(int) < 119857067 )),(0), (ZmPR3['Background_Start']))
+ZmPR3['Background_Stop'] = np.where(((ZmPR3['ZmPR+'] == 1) & (ZmPR3['5_Breakpoint'].astype(int) > 7384635 ) &
+    (ZmPR3['3_Breakpoint'].astype(int) < 119857067 )),(0), (ZmPR3['Background_Stop']))
+
+#Starts and stops in background scenario
+ZmPR3['Background_Start'] = np.where((ZmPR3['ZmPR+'] != 1), (ZmPR3['5_Breakpoint']), (ZmPR3['Background_Start']))
+ZmPR3['Background_Stop'] = np.where((ZmPR3['ZmPR+'] != 1), (ZmPR3['3_Breakpoint']), (ZmPR3['Background_Stop']))
+
+ZmPR3['Background_Perc'] = (ZmPR3['Background_Stop'].astype(int) - ZmPR3['Background_Start'].astype(int)).div(B73len)*100
+
+ZmPR3 = ZmPR3[ZmPR3.columns[~ZmPR3.columns.to_series().str.contains('Start')]]
+ZmPR3 = ZmPR3[ZmPR3.columns[~ZmPR3.columns.to_series().str.contains('Stop')]]
+ZmPR3 = ZmPR3[ZmPR_list]
+
+FG3 = ['Sample','Scheme', 'ZmPR','Hap_Geno','Foreground_Perc']
+ZmPR3_FG_Geno = ZmPR3.filter((FG3))
+ZmPR3_FG_Geno['Hap_Geno'] = ZmPR3_FG_Geno['Hap_Geno'].map({'DP':'DP_FG','RP':'RP_FG', 'NA':'NA_FG','Het':'Het_FG'})
+
+
+BG3 = ['Sample','Scheme', 'ZmPR','Hap_Geno','Background_Perc']
+ZmPR3_BG_Geno = ZmPR3.filter((BG3))
+ZmPR3_BG_Geno['Hap_Geno'] = ZmPR3_BG_Geno['Hap_Geno'].map({'DP':'DP_BG','RP':'RP_BG', 'NA':'NA_BG','Het':'Het_BG'})
+
+
+ZmPR3_Geno_Sum = pd.concat([ZmPR3_FG_Geno,ZmPR3_BG_Geno], axis=0)
+ZmPR3_Geno_Sum = ZmPR3_Geno_Sum[~ZmPR3_Geno_Sum['Sample'].str.contains('C')]
+ZmPR3_Geno_Sum = ZmPR3_Geno_Sum.fillna(0)
+ZmPR3_Geno_Sum['Perc_Geno'] = ZmPR3_Geno_Sum['Foreground_Perc'] + ZmPR3_Geno_Sum['Background_Perc']
+
+ZmPR3_Geno_Sum = ZmPR3_Geno_Sum.pivot_table(index=['Sample','Scheme','ZmPR'], columns=['Hap_Geno'], values='Perc_Geno', aggfunc='sum')
+ZmPR3_Geno_Sum = ZmPR3_Geno_Sum.fillna(0)
+
+ZmPR3I = ZmPR3[~ZmPR3['Sample'].str.contains('C')]
+ZmPR3I.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR3_SUM.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
+ZmPR3C = ZmPR3[ZmPR3['Sample'].str.contains('C')]
+ZmPR3C.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR3_SUMC.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
+ZmPR3_Geno_Sum.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR3_Geno_Sum.txt'), sep='\t', header=True,index=True) #------------->Genotype Percentages {Export}
+
+###_______ZMPR4______________________________________________________________________________________________###
+
+###-------- FOREGROUND---------#####
+ZmPR4 =NILAS_Values[NILAS_Values['Sample'].str.contains('4g')].copy()
+
+ZmPR4['Scheme'] = ZmPR4['Sample'].str.extract('(g..)', expand=None)
+ZmPR4['Scheme'] = ZmPR4['Scheme'].map(Scheme_dict)
+
+ZmPR4['ZmPR'] = ZmPR4['Sample'].str.extract('q(.)', expand=None)
+
+ZmPR4['Hap_Geno'] = ZmPR4['Hap_Geno'].map(Geno_dict)
+
+ZmPR4['5_Breakpoint'] = ZmPR4['5_Breakpoint'].astype(float)
+ZmPR4['3_Breakpoint'] = ZmPR4['3_Breakpoint'].astype(float)
+
+ZmPR4['ZmPR+'] = np.where(((ZmPR4['5_Breakpoint'].astype(float)).between(10126632, 136329803, inclusive=True) & (ZmPR4['CHROM'] ==  '10') |
+     (ZmPR4['3_Breakpoint'].astype(float).between(10126632, 136329803, inclusive=True)) & (ZmPR4['CHROM'] ==  '10')),1,0)
+
+ZmPR4['Foreground_Start'] = np.where((ZmPR4['ZmPR+'] == 1) & (ZmPR4['5_Breakpoint'].astype(int) < 10126632 ), 10126632, ZmPR4['5_Breakpoint'])
+ZmPR4['Foreground_Start'] = np.where((ZmPR4['ZmPR+'] != 1), 0, ZmPR4['Foreground_Start'])
+
+ZmPR4['Foreground_Stop'] = np.where((ZmPR4['ZmPR+'] == 1) & (ZmPR4['3_Breakpoint'].astype(int) > 136329803 ), 136329803, ZmPR4['3_Breakpoint'])
+ZmPR4['Foreground_Stop'] = np.where((ZmPR4['ZmPR+'] != 1), 0, ZmPR4['Foreground_Stop'])
+ 
+ZmPR4['Foreground_Perc'] = np.where((ZmPR4['ZmPR+'] == 1),
+    ((ZmPR4['Foreground_Stop'].astype(int) - ZmPR4['Foreground_Start'].astype(int)).div(B73len)*100),0)
+
+ZmPR4['FG_5_BP_Density']= np.where((ZmPR4['ZmPR+'] == 1),ZmPR4['5_BP_Density'],0)
+ZmPR4['FG_3_BP_Density']= np.where((ZmPR4['ZmPR+'] == 1),ZmPR4['3_BP_Density'],0)
+
+###-------- Background---------#####
+
+ZmPR4['BG_5_BP_Density']= np.where((ZmPR4['ZmPR+'] != 1),ZmPR4['5_BP_Density'],0)
+ZmPR4['BG_3_BP_Density']= np.where((ZmPR4['ZmPR+'] != 1),ZmPR4['3_BP_Density'],0)
+
+#Starts in background; stops in ZmPR scenario
+ZmPR4['Background_Start'] = np.where(((ZmPR4['ZmPR+'] == 1) & (ZmPR4['5_Breakpoint'].astype(int) < 10126632 ) &
+    (ZmPR4['3_Breakpoint'].astype(int) < 136329803 )),(ZmPR4['5_Breakpoint']), (0))
+ZmPR4['Background_Stop'] = np.where(((ZmPR4['ZmPR+'] == 1) & (ZmPR4['5_Breakpoint'].astype(int) < 10126632 ) &
+    (ZmPR4['3_Breakpoint'].astype(int) < 136329803 )),(10126632), (0))
+
+#Starts in ZmPR; stops in background scenario
+ZmPR4['Background_Start'] = np.where(((ZmPR4['ZmPR+'] == 1) & (ZmPR4['5_Breakpoint'].astype(int) < 136329803 ) &
+    (ZmPR4['3_Breakpoint'].astype(int) > 136329803 )),(136329803), (ZmPR4['Background_Start'])) 
+ZmPR4['Background_Stop'] = np.where(((ZmPR4['ZmPR+'] == 1) & (ZmPR4['5_Breakpoint'].astype(float)).between(10126632, 136329803, inclusive=True) &
+    (ZmPR4['3_Breakpoint'].astype(int) > 136329803 )),(ZmPR4['3_Breakpoint']), (ZmPR4['Background_Stop']))
+
+#Starts and stops in ZmPR scenario
+ZmPR4['Background_Start'] = np.where(((ZmPR4['ZmPR+'] == 1) & (ZmPR4['5_Breakpoint'].astype(int) > 10126632 ) &
+    (ZmPR4['3_Breakpoint'].astype(int) < 136329803 )),(0), (ZmPR4['Background_Start']))
+ZmPR4['Background_Stop'] = np.where(((ZmPR4['ZmPR+'] == 1) & (ZmPR4['5_Breakpoint'].astype(int) > 10126632 ) &
+    (ZmPR4['3_Breakpoint'].astype(int) < 136329803 )),(0), (ZmPR4['Background_Stop']))
+
+#Starts and stops in background scenario
+ZmPR4['Background_Start'] = np.where((ZmPR4['ZmPR+'] != 1), (ZmPR4['5_Breakpoint']), (ZmPR4['Background_Start']))
+ZmPR4['Background_Stop'] = np.where((ZmPR4['ZmPR+'] != 1), (ZmPR4['3_Breakpoint']), (ZmPR4['Background_Stop']))
+
+ZmPR4['Background_Perc'] = (ZmPR4['Background_Stop'].astype(int) - ZmPR4['Background_Start'].astype(int)).div(B73len)*100
+
+ZmPR4 = ZmPR4[ZmPR4.columns[~ZmPR4.columns.to_series().str.contains('Start')]]
+ZmPR4 = ZmPR4[ZmPR4.columns[~ZmPR4.columns.to_series().str.contains('Stop')]]
+ZmPR4 = ZmPR4[ZmPR_list]
+
+FG4 = ['Sample','Scheme', 'ZmPR','Hap_Geno','Foreground_Perc']
+ZmPR4_FG_Geno = ZmPR4.filter((FG4))
+ZmPR4_FG_Geno['Hap_Geno'] = ZmPR4_FG_Geno['Hap_Geno'].map({'DP':'DP_FG','RP':'RP_FG', 'NA':'NA_FG','Het':'Het_FG'})
+
+
+BG4 = ['Sample','Scheme', 'ZmPR','Hap_Geno','Background_Perc']
+ZmPR4_BG_Geno = ZmPR4.filter((BG4))
+ZmPR4_BG_Geno['Hap_Geno'] = ZmPR4_BG_Geno['Hap_Geno'].map({'DP':'DP_BG','RP':'RP_BG', 'NA':'NA_BG','Het':'Het_BG'})
+
+
+ZmPR4_Geno_Sum = pd.concat([ZmPR4_FG_Geno,ZmPR4_BG_Geno], axis=0)
+ZmPR4_Geno_Sum = ZmPR4_Geno_Sum[~ZmPR4_Geno_Sum['Sample'].str.contains('C')]
+ZmPR4_Geno_Sum = ZmPR4_Geno_Sum.fillna(0)
+ZmPR4_Geno_Sum['Perc_Geno'] = ZmPR4_Geno_Sum['Foreground_Perc'] + ZmPR4_Geno_Sum['Background_Perc']
+
+ZmPR4_Geno_Sum = ZmPR4_Geno_Sum.pivot_table(index=['Sample','Scheme','ZmPR'], columns=['Hap_Geno'], values='Perc_Geno', aggfunc='sum')
+ZmPR4_Geno_Sum = ZmPR4_Geno_Sum.fillna(0)
+
+ZmPR4I = ZmPR4[~ZmPR4['Sample'].str.contains('C')]
+ZmPR4I.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR4_SUM.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
+ZmPR4C = ZmPR4[ZmPR4['Sample'].str.contains('C')]
 ZmPR4C.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR4_SUMC.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
 ZmPR4_Geno_Sum.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR4_Geno_Sum.txt'), sep='\t', header=True,index=True) #------------->Genotype Percentages {Export}
 
