@@ -16,6 +16,10 @@ Using SSH protocol
 
 `$ git clone git@github.com:maizeatlas/nilas_haploimputer.git`
 
+## Input:
+
+## Output:
+
 ## Usage:
 
 `$ python NILAS_haploimputer.py 2369C CML277C g31`
