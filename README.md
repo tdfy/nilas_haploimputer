@@ -18,4 +18,4 @@ Using SSH protocol
 
 ## Usage:
 
-`$ python nilas_haploimputer.py 2369C CML277C g31`
+`$ python NILAS_haploimputer.py 2369C CML277C g31`
