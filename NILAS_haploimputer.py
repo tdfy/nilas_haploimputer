@@ -756,7 +756,7 @@ ZmPR1_Geno_Sum.to_csv(path + '/' +sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR1_Geno_Sum.
 ###-------- FOREGROUND---------#####
 ZmPR2 =NILAS_Values[NILAS_Values['Sample'].str.contains('2g')].copy()
 
-ZmPR2['Scheme'] = ZmPR2['Sample'].str.extract('(g..)', expand=None)
+ZmPR2['Scheme'] = ZmPR2['Sample'].str.extract('(g..)', expand=False)
 ZmPR2['Scheme'] = ZmPR2['Scheme'].map(Scheme_dict)
 
 ZmPR2['ZmPR'] = ZmPR2['Sample'].str.extract('q(.)', expand=None)
