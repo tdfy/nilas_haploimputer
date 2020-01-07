@@ -7,17 +7,33 @@ exports genomic coordinates and encoded/imputed genotype matrices for visualizat
 
 ## Dependencies:
 
-* pybedtools <https://daler.github.io/pybedtools/>
-* numPY <https://numpy.org/>
-* pandas <https://pandas.pydata.org/>
+* pybedtools <https://daler.github.io/pybedtools/>  >= v0.7.10
+* numPY <https://numpy.org/> >= v1.17.0
+* pandas <https://pandas.pydata.org/> >= v0.25.0 
 
 ## Installation:
 
 `$ git clone git@github.com:maizeatlas/nilas_haploimputer.git`
 
 ## Input:
+1. Recurrent Parent Consensus Genotype - ex. 2369C
+2. Donor Parent Consensus Genotype - ex. CML277C
+3. Group Number - ex. g31
+4. Directory containing:
+ -NILAS Genotype Extracted VCF file - ex. NILAS_g31.GT
+ -NewCon.txt: Founder Genotype Consenus File
+ -isdigB73v4_pid96_convert.bed: In silico digestion bed file 
+ -multimode.txt: multimodal marker sites excluded in Founder genotype consensus file
+
+**All input files must be tab seperated**
 
 ## Output:
+1. Group bed file containing marker-in silico-contig intersection coordinates and identifer
+2. Encoded genotype matrix for NILAS group 
+3. Imputed genotype matrix for NILAS group
+4. Genotype matrices per subgroup for introgression and complement lines
+5. Genotype Composition per subgroup files for introgression and complement lines
+6. Subgroup summary files 
 
 ## Usage:
 
