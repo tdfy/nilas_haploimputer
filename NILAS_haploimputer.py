@@ -30,6 +30,7 @@ Recurrent_Parent = sys.argv[1]
 Donor_Parent = sys.argv[2]
 NILAS_Crossing_Scheme = sys.argv[3]
 dir = sys.argv[4]
+NILAS_gt = sys.argv[5]
 
 path = dir + '/' + sys.argv[1] + "x" + sys.argv[2] + '/'
 
@@ -72,7 +73,7 @@ Coordinates = ['CHROM', 'POS']
 
 # Import GT Files (manual CoO filter)---------------------------------------------------------------------------------------------
 print ("Importing GT file----- YOU HAVE A MANUAL COORDINATE FILTER ON...")
-gtdata = pd.read_csv(dir + '/' + 'NILAS.GT.FORMAT', sep="\t", dtype =object)
+gtdata = pd.read_csv(dir + '/' + NILAS_gt, sep="\t", dtype =object)
 
 NonCon = pd.read_csv(dir + '/' +  'multimode.txt', sep="\t", dtype =object)               #<--------- Manual Coordinate Filter
 NonConlist = NonCon['POS']
