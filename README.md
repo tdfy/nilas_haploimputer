@@ -12,7 +12,6 @@ exports genomic coordinates and encoded/imputed genotype matrices for visualizat
 * pandas <https://pandas.pydata.org/>
 
 ## Installation:
-Using SSH protocol
 
 `$ git clone git@github.com:maizeatlas/nilas_haploimputer.git`
 
@@ -22,4 +21,4 @@ Using SSH protocol
 
 ## Usage:
 
-`$ python NILAS_haploimputer.py 2369C CML277C g31`
+`$ python NILAS_haploimputer.py 2369C CML277C g31 '/Users/Todd/Dropbox/GBSThesis/NILAS_Final/test'`
