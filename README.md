@@ -21,4 +21,4 @@ exports genomic coordinates and encoded/imputed genotype matrices for visualizat
 
 ## Usage:
 
-`$ python NILAS_haploimputer.py 2369C CML277C g31 '/Users/Todd/Dropbox/GBSThesis/NILAS_Final/test'`
+`$ python NILAS_haploimputer.py 2369C CML277C g31 '/Users/Todd/Dropbox//NILAS/'`
