@@ -759,7 +759,7 @@ ZmPR2 =NILAS_Values[NILAS_Values['Sample'].str.contains('2g')].copy()
 ZmPR2['Scheme'] = ZmPR2['Sample'].str.extract('(g..)', expand=False)
 ZmPR2['Scheme'] = ZmPR2['Scheme'].map(Scheme_dict)
 
-ZmPR2['ZmPR'] = ZmPR2['Sample'].str.extract('q(.)', expand=None)
+ZmPR2['ZmPR'] = ZmPR2['Sample'].str.extract('q(.)', expand=False)
 
 ZmPR2['Hap_Geno'] = ZmPR2['Hap_Geno'].map(Geno_dict)
 
@@ -843,10 +843,10 @@ ZmPR2_Geno_Sum.to_csv(path + '/' +sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR2_Geno_Sum.
 ###-------- FOREGROUND---------#####
 ZmPR3 =NILAS_Values[NILAS_Values['Sample'].str.contains('3g')].copy()
 
-ZmPR3['Scheme'] = ZmPR3['Sample'].str.extract('(g..)', expand=None)
+ZmPR3['Scheme'] = ZmPR3['Sample'].str.extract('(g..)', expand=False)
 ZmPR3['Scheme'] = ZmPR3['Scheme'].map(Scheme_dict)
 
-ZmPR3['ZmPR'] = ZmPR3['Sample'].str.extract('q(.)', expand=None)
+ZmPR3['ZmPR'] = ZmPR3['Sample'].str.extract('q(.)', expand=False)
 
 ZmPR3['Hap_Geno'] = ZmPR3['Hap_Geno'].map(Geno_dict)
 
@@ -930,10 +930,10 @@ ZmPR3_Geno_Sum.to_csv(path + '/' +sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR3_Geno_Sum.
 ###-------- FOREGROUND---------#####
 ZmPR4 =NILAS_Values[NILAS_Values['Sample'].str.contains('4g')].copy()
 
-ZmPR4['Scheme'] = ZmPR4['Sample'].str.extract('(g..)', expand=None)
+ZmPR4['Scheme'] = ZmPR4['Sample'].str.extract('(g..)', expand=False)
 ZmPR4['Scheme'] = ZmPR4['Scheme'].map(Scheme_dict)
 
-ZmPR4['ZmPR'] = ZmPR4['Sample'].str.extract('q(.)', expand=None)
+ZmPR4['ZmPR'] = ZmPR4['Sample'].str.extract('q(.)', expand=False)
 
 ZmPR4['Hap_Geno'] = ZmPR4['Hap_Geno'].map(Geno_dict)
 
