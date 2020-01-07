@@ -737,7 +737,7 @@ ZmPR1_BG_Geno = ZmPR1.filter((BG1))
 ZmPR1_BG_Geno['Hap_Geno'] = ZmPR1_BG_Geno['Hap_Geno'].map({'DP':'DP_BG','RP':'RP_BG', 'NA':'NA_BG','Het':'Het_BG'})
 
 
-ZmPR1_Geno_Sum = pd.concat([ZmPR1_FG_Geno,ZmPR1_BG_Geno], axis=0)
+ZmPR1_Geno_Sum = pd.concat([ZmPR1_FG_Geno,ZmPR1_BG_Geno], axis=0,sort=True)
 # ZmPR1_Geno_Sum = ZmPR1_Geno_Sum[~ZmPR1_Geno_Sum['Sample'].str.contains('C')]
 ZmPR1_Geno_Sum = ZmPR1_Geno_Sum.fillna(0)
 ZmPR1_Geno_Sum['Perc_Geno'] = ZmPR1_Geno_Sum['Foreground_Perc'] + ZmPR1_Geno_Sum['Background_Perc']
