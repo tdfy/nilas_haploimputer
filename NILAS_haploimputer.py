@@ -23,17 +23,33 @@ import os
 import pybedtools
 
 
+
 #User Variables:--------------------------------------------------------------------------------------------------------------
 
 Recurrent_Parent = sys.argv[1]
 Donor_Parent = sys.argv[2]
 NILAS_Crossing_Scheme = sys.argv[3]
+dir = sys.argv[4]
 
-#Global Declarations:--------------------------------------------------------------------------------------------------------------
+path = dir + '/' + sys.argv[1] + "x" + sys.argv[2] + '/'
 
-# NILASdir = os.makedirs('//Users//Todd/Dropbox//GBSThesis//NILAS_Final//' + sys.argv[1] + "x" + sys.argv[2] + '//' )  #<--------- Generates Group Directory 
-path = '//Users//Todd/Dropbox//WisserLab_share//NILAS/NILAS_Final//' + sys.argv[1] + "x" + sys.argv[2] + '//'
+new_dir = path.replace('/','//')
 
+if os.path.isdir(new_dir) != True:
+    
+    print(new_dir)
+    NILASdir = os.makedirs(new_dir)
+    print('Generating Directory...',NILASdir)
+else:
+    
+    NILASdir = path
+    print("Directory Present:",NILASdir)
+
+
+
+# #Global Declarations:--------------------------------------------------------------------------------------------------------------
+
+ 
 CHROMend = {'1':307041717,'2':244442276,'3':235667834,'4':246994605,'5':223902240,'6':174033170,
             '7':182381542,'8':181122637, '9':159769782, '10':150982314}
 
@@ -56,13 +72,13 @@ Coordinates = ['CHROM', 'POS']
 
 # Import GT Files (manual CoO filter)---------------------------------------------------------------------------------------------
 print ("Importing GT file----- YOU HAVE A MANUAL COORDINATE FILTER ON...")
-gtdata = pd.read_csv("NILAS.GT.FORMAT", sep="\t", dtype =object)
+gtdata = pd.read_csv(dir + '/' + 'NILAS.GT.FORMAT', sep="\t", dtype =object)
 
-NonCon = pd.read_csv("multimode.txt", sep="\t", dtype =object)               #<--------- Manual Coordinate Filter
+NonCon = pd.read_csv(dir + '/' +  'multimode.txt', sep="\t", dtype =object)               #<--------- Manual Coordinate Filter
 NonConlist = NonCon['POS']
 gtdata = gtdata[~gtdata.POS.isin(NonConlist)]
 
-Consensus = pd.read_csv("NewCon.txt", sep="\t", dtype =object)      #<--------- DP RP consensus genotypes w/ MultiMode Sites Filtered 
+Consensus = pd.read_csv(dir + '/' + 'NewCon.txt', sep="\t", dtype =object)      #<--------- DP RP consensus genotypes w/ MultiMode Sites Filtered 
 Consensus = Consensus[~Consensus.POS.isin(NonConlist)]         
 
 # Select Founder Lines________________________________________________________________________________________________________________
@@ -91,7 +107,7 @@ print('Filtering DP/RP Sites: NonVariant/Missing Data....')
 # Compile Het Sites Coordinate and Export:
 NILAShet = gtdataNILAS[(gtdataNILAS.iloc[:,2] == '0/1') | (gtdataNILAS.iloc[:,3] == '0/1')]
 NILAShet = NILAShet.iloc[:,0:4]
-NILAShet.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_DP_RP_HET.txt'), sep='\t')  #-------------> Parental Heterozygous sites{Export}
+NILAShet.to_csv(dir+ '/' + sys.argv[1]+'x'+sys.argv[2]+r'_DP_RP_HET.txt', sep='\t')  #-------------> Parental Heterozygous sites{Export}
 
 # Filter Missing and Het Sites from Consensus Parents: 
 gtdataNILAS = gtdataNILAS[(gtdataNILAS.iloc[:,2] != gtdataNILAS.iloc[:,3]) &
@@ -153,10 +169,10 @@ CoBed = CoBed[~CoBed['CHROM'].str.contains('B73V4_ctg')]
 
 CoBed['stop'] = CoBed.iloc[:,1].astype(int) + 1
 
-CoBed.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'.bed'), sep='\t', header= False, index= False)
+CoBed.to_csv(path +sys.argv[1]+'x'+sys.argv[2]+r'.bed', sep='\t', header= False, index= False)
 
-GroupBed = pybedtools.BedTool(path + '//'+sys.argv[1]+'x'+sys.argv[2]+r'.bed')
-B73isc = pybedtools.BedTool('isdigB73v4_pid96_convert.bed')
+GroupBed = pybedtools.BedTool(path + '/'+sys.argv[1]+'x'+sys.argv[2]+r'.bed')
+B73isc = pybedtools.BedTool(dir + '/' + 'isdigB73v4_pid96_convert.bed')
 
 U_isc = pybedtools.BedTool.intersect(GroupBed,B73isc, wb=True)
 
@@ -476,28 +492,28 @@ NILASintro1 = pd.concat([CoO_Hap, NILASZmPR1int], axis=1)
 NILAS1Fig= NILASintro1[(NILASintro1['CHROM'] ==  '1') &  (NILASintro1['POS'].astype(int).between(57191440, 185363076, inclusive=True))]
 NILAS1Fig= NILAS1Fig.drop(NILAS1Fig.columns[0:2], axis=1)
 NILAS1Fig= NILAS1Fig.transpose()
-NILAS1Fig.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR1_Fig.txt'), sep='\t')
+NILAS1Fig.to_csv(path +'/' + sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR1_Fig.txt', sep='\t')
 
 NILASZmPR2int  = NILAShap[Zm2sample_list]
 NILASintro2 = pd.concat([CoO_Hap, NILASZmPR2int], axis=1)
 NILAS2Fig= NILASintro2[(NILASintro2['CHROM'] ==  '8') &  (NILASintro2['POS'].astype(int).between(97682806, 167995313, inclusive=True))]
 NILAS2Fig= NILAS2Fig.drop(NILAS2Fig.columns[0:2], axis=1)
 NILAS2Fig= NILAS2Fig.transpose()
-NILAS2Fig.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR2_Fig.txt'), sep='\t')
+NILAS2Fig.to_csv(path +'/' + sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR2_Fig.txt', sep='\t')
 
 NILASZmPR3int  = NILAShap[Zm3sample_list]
 NILASintro3 = pd.concat([CoO_Hap, NILASZmPR3int], axis=1)
 NILAS3Fig= NILASintro3[(NILASintro3['CHROM'] ==  '9') &  (NILASintro3['POS'].astype(int).between(7384635, 119857067, inclusive=True))]
 NILAS3Fig= NILAS3Fig.drop(NILAS3Fig.columns[0:2], axis=1)
 NILAS3Fig= NILAS3Fig.transpose()
-NILAS3Fig.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR3_Fig.txt'), sep='\t')
+NILAS3Fig.to_csv(path +'/' + sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR3_Fig.txt', sep='\t')
 
 NILASZmPR4int  = NILAShap[Zm4sample_list]
 NILASintro4 = pd.concat([CoO_Hap, NILASZmPR4int], axis=1)
 NILAS4Fig= NILASintro4[(NILASintro4['CHROM'] ==  '10') &  (NILASintro4['POS'].astype(int).between(10126632, 136329803, inclusive=True))]
 NILAS4Fig= NILAS4Fig.drop(NILAS4Fig.columns[0:2], axis=1)
 NILAS4Fig= NILAS4Fig.transpose()
-NILAS4Fig.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR4_Fig.txt'), sep='\t')
+NILAS4Fig.to_csv(path +'/' + sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR4_Fig.txt', sep='\t')
 
 #___________________________________________________________________________________________________________________#
 
@@ -518,28 +534,28 @@ NILAS_comp1 = pd.concat([CoO_Hap, NILASZmPR1comp], axis=1)
 NILAS1figC= NILAS_comp1[(NILAS_comp1['CHROM'] ==  '1') &  (NILAS_comp1['POS'].astype(int).between(57191440, 185363076, inclusive=True))]
 NILAS1figC= NILAS1figC.drop(NILAS1figC.columns[0:2], axis=1)
 NILAS1figC= NILAS1figC.transpose()
-NILAS1figC.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR1_COMP_fig.txt'), sep='\t')
+NILAS1figC.to_csv(path +'/' + sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR1_COMP_fig.txt', sep='\t')
 
 NILASZmPR2comp  = NILAShap[Zm2sample_complist]
 NILAS_comp2 = pd.concat([CoO_Hap, NILASZmPR2comp], axis=1)
 NILAS2figC= NILAS_comp2[(NILAS_comp2['CHROM'] ==  '8') &  (NILAS_comp2['POS'].astype(int).between(97682806, 167995313, inclusive=True))]
 NILAS2figC= NILAS2figC.drop(NILAS2figC.columns[0:2], axis=1)
 NILAS2figC= NILAS2figC.transpose()
-NILAS2figC.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR2_COMP_fig.txt'), sep='\t')
+NILAS2figC.to_csv(path +'/' + sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR2_COMP_fig.txt', sep='\t')
 
 NILASZmPR3comp  = NILAShap[Zm3sample_complist]
 NILAS_comp3 = pd.concat([CoO_Hap, NILASZmPR3comp], axis=1)
 NILAS3figC= NILAS_comp3[(NILAS_comp3['CHROM'] ==  '9') &  (NILAS_comp3['POS'].astype(int).between(7384635, 119857067, inclusive=True))]
 NILAS3figC= NILAS3figC.drop(NILAS3figC.columns[0:2], axis=1)
 NILAS3figC= NILAS3figC.transpose()
-NILAS3figC.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR3_COMP_fig.txt'), sep='\t')
+NILAS3figC.to_csv(path +'/' + sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR3_COMP_fig.txt', sep='\t')
 
 NILASZmPR4comp  = NILAShap[Zm4sample_complist]
 NILAS_comp4 = pd.concat([CoO_Hap, NILASZmPR4comp], axis=1)
 NILAS4figC= NILAS_comp4[(NILAS_comp4['CHROM'] ==  '10') &  (NILAS_comp4['POS'].astype(int).between(10126632, 136329803, inclusive=True))]
 NILAS4figC= NILAS4figC.drop(NILAS4figC.columns[0:2], axis=1)
 NILAS4figC= NILAS4figC.transpose()
-NILAS4figC.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR4_COMP_fig.txt'), sep='\t')
+NILAS4figC.to_csv(path +'/' + sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR4_COMP_fig.txt', sep='\t')
 
 ##______________________________________________________________________________________________________________##
 
@@ -547,16 +563,16 @@ NILASencode = gtdataNILAS[gtdataNILAS.columns[~gtdataNILAS.columns.to_series().s
 NILASencode = NILASencode[~NILASencode['CHROM'].str.contains('B73V4_ctg')]
 NILASencode = NILASencode.drop(NILASencode.columns[0:5], axis=1)
 NILASencode = NILASencode.transpose()
-NILASencode.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_Encoded_Genotypes.txt'), sep='\t')       #------------->Genotype Outfile {Export}
+NILASencode.to_csv(path +'/' + sys.argv[1]+'x'+sys.argv[2]+r'_Encoded_Genotypes.txt', sep='\t')       #------------->Genotype Outfile {Export}
 
 HapMap = NILAShap.filter((Coordinates))
-HapMap.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_Coordinates.txt'), sep='\t', header= False, index= True) #------------->MAP Outfile {Export}
+HapMap.to_csv(path + '/' +sys.argv[1]+'x'+sys.argv[2]+r'_Coordinates.txt', sep='\t', header= False, index= True) #------------->MAP Outfile {Export}
  
 NILAS_Imputed = NILAShap.iloc[:,0:SampleNo + 2]
 
 NILAS_Imputed = NILAS_Imputed[NILAS_Imputed.columns[NILAS_Imputed.columns.to_series().str.contains('NILAS')]]
 NILASgt = NILAS_Imputed.transpose()
-NILASgt.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_Imputed_Genotypes.txt'), sep='\t')       #------------->Impute Outfile{ Export}
+NILASgt.to_csv(path +'/' + sys.argv[1]+'x'+sys.argv[2]+r'_Imputed_Genotypes.txt', sep='\t')       #------------->Impute Outfile{ Export}
 
 #Redefine  Haploytpe Blocks--------------------------------------------------------------------------------------------
 
@@ -730,10 +746,10 @@ ZmPR1_Geno_Sum = ZmPR1_Geno_Sum.fillna(0)
 # print(ZmPR1)
 
 ZmPR1I = ZmPR1[~ZmPR1['Sample'].str.contains('C')]
-ZmPR1I.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR1_SUM.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
+ZmPR1I.to_csv(path + '/' + sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR1_SUM.txt', sep='\t', header=True,index=False)#------------->Global {Export}
 ZmPR1C = ZmPR1[ZmPR1['Sample'].str.contains('C')]
-ZmPR1C.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR1_SUMC.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
-ZmPR1_Geno_Sum.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR1_Geno_Sum.txt'), sep='\t', header=True,index=True) #------------->Genotype Percentages {Export}
+ZmPR1C.to_csv(path + '/' + sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR1_SUMC.txt', sep='\t', header=True,index=False)#------------->Global {Export}
+ZmPR1_Geno_Sum.to_csv(path + '/' +sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR1_Geno_Sum.txt', sep='\t', header=True,index=True) #------------->Genotype Percentages {Export}
 ##_______ZMPR2______________________________________________________________________________________________###
 
 ###-------- FOREGROUND---------#####
@@ -816,10 +832,10 @@ ZmPR2_Geno_Sum = ZmPR2_Geno_Sum.pivot_table(index=['Sample','Scheme','ZmPR'], co
 ZmPR2_Geno_Sum = ZmPR2_Geno_Sum.fillna(0)
 
 ZmPR2I = ZmPR2[~ZmPR2['Sample'].str.contains('C')]
-ZmPR2I.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR2_SUM.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
+ZmPR2I.to_csv(path + '/' +sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR2_SUM.txt', sep='\t', header=True,index=False)#------------->Global {Export}
 ZmPR2C = ZmPR2[ZmPR2['Sample'].str.contains('C')]
-ZmPR2C.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR2_SUMC.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
-ZmPR2_Geno_Sum.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR2_Geno_Sum.txt'), sep='\t', header=True,index=True) #------------->Genotype Percentages {Export} {Export}
+ZmPR2C.to_csv(path + '/' +sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR2_SUMC.txt', sep='\t', header=True,index=False)#------------->Global {Export}
+ZmPR2_Geno_Sum.to_csv(path + '/' +sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR2_Geno_Sum.txt', sep='\t', header=True,index=True) #------------->Genotype Percentages {Export} {Export}
 
 ###_______ZMPR3______________________________________________________________________________________________###
 
@@ -903,10 +919,10 @@ ZmPR3_Geno_Sum = ZmPR3_Geno_Sum.pivot_table(index=['Sample','Scheme','ZmPR'], co
 ZmPR3_Geno_Sum = ZmPR3_Geno_Sum.fillna(0)
 
 ZmPR3I = ZmPR3[~ZmPR3['Sample'].str.contains('C')]
-ZmPR3I.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR3_SUM.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
+ZmPR3I.to_csv(path + '/' +sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR3_SUM.txt', sep='\t', header=True,index=False)#------------->Global {Export}
 ZmPR3C = ZmPR3[ZmPR3['Sample'].str.contains('C')]
-ZmPR3C.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR3_SUMC.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
-ZmPR3_Geno_Sum.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR3_Geno_Sum.txt'), sep='\t', header=True,index=True) #------------->Genotype Percentages {Export}
+ZmPR3C.to_csv(path + '/' +sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR3_SUMC.txt', sep='\t', header=True,index=False)#------------->Global {Export}
+ZmPR3_Geno_Sum.to_csv(path + '/' +sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR3_Geno_Sum.txt', sep='\t', header=True,index=True) #------------->Genotype Percentages {Export}
 
 ###_______ZMPR4______________________________________________________________________________________________###
 
@@ -990,10 +1006,10 @@ ZmPR4_Geno_Sum = ZmPR4_Geno_Sum.pivot_table(index=['Sample','Scheme','ZmPR'], co
 ZmPR4_Geno_Sum = ZmPR4_Geno_Sum.fillna(0)
 
 ZmPR4I = ZmPR4[~ZmPR4['Sample'].str.contains('C')]
-ZmPR4I.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR4_SUM.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
+ZmPR4I.to_csv(path + '/' +sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR4_SUM.txt', sep='\t', header=True,index=False)#------------->Global {Export}
 ZmPR4C = ZmPR4[ZmPR4['Sample'].str.contains('C')]
-ZmPR4C.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR4_SUMC.txt'), sep='\t', header=True,index=False)#------------->Global {Export}
-ZmPR4_Geno_Sum.to_csv(os.path.join(path,sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR4_Geno_Sum.txt'), sep='\t', header=True,index=True) #------------->Genotype Percentages {Export}
+ZmPR4C.to_csv(path + '/' +sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR4_SUMC.txt', sep='\t', header=True,index=False)#------------->Global {Export}
+ZmPR4_Geno_Sum.to_csv(path + '/' +sys.argv[1]+'x'+sys.argv[2]+r'_ZmPR4_Geno_Sum.txt', sep='\t', header=True,index=True) #------------->Genotype Percentages {Export}
 
 
 print ('!!!!----Script Complete----!!!!')
