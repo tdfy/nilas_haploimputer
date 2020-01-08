@@ -19,11 +19,11 @@ exports genomic coordinates and encoded/imputed genotype matrices for visualizat
 1. Recurrent Parent Consensus Genotype - ex. 2369C
 2. Donor Parent Consensus Genotype - ex. CML277C
 3. Group Number - ex. g31
-4. Directory containing:
- -NILAS Genotype Extracted VCF file - ex. NILAS_g31.GT
- -NewCon.txt: Founder Genotype Consenus File
- -isdigB73v4_pid96_convert.bed: In silico digestion bed file 
- -multimode.txt: multimodal marker sites excluded in Founder genotype consensus file
+4. Directory containing:  
+    -NILAS Genotype Extracted VCF file - ex. NILAS_g31.GT  
+    -NewCon.txt: Founder Genotype Consenus File  
+    -isdigB73v4_pid96_convert.bed: In silico digestion bed file  
+    -multimode.txt: multimodal marker sites excluded in Founder genotype consensus file  
 
 **All input files must be tab seperated**
 
