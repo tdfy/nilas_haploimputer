@@ -39,7 +39,7 @@ With the imputation rules applied by NILAS_haploimputer.py, less than 0.1% of th
       - isdigB73v4_pid96_convert.bed: In silico digestion bed file  
       - multimode.txt: multimodal marker sites excluded in Founder genotype consensus file  
 
-**All input files must be tab seperated**
+**All input files must be tab separated**
 
 ## Output:
 
